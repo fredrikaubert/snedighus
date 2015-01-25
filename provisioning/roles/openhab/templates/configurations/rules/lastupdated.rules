@@ -1,0 +1,49 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+import java.util.Map
+
+rule "Records last outdoor temperature update time"
+when
+	Item td_sensor_oregon_53_1 received update
+then
+	postUpdate(OutdoorTemperature_LastUpdate, new DateTimeType())
+end
+
+rule "Records last bedroom temperature update time"
+when
+	Item td_sensor_oregon_111_1 received update
+then
+	postUpdate(BedroomTemperature_LastUpdate, new DateTimeType())
+end
+
+
+rule "Records last livingroom temperature update time"
+when
+	Item td_sensor_oregon_217_1 received update
+then
+	postUpdate(LivingroomTemperature_LastUpdate, new DateTimeType())
+end
+
+
+rule "Records last guestroom temperature update time"
+when
+	Item td_sensor_oregon_guestroom_temp received update
+then
+	postUpdate(GuestroomTemperature_LastUpdate, new DateTimeType())
+end
+
+rule "Records last office temperature update time"
+when
+	Item sensor_office_temp received update
+then
+	postUpdate(OfficeTemperature_LastUpdate, new DateTimeType())
+end
+
+rule "Records last meat temperature update time"
+when
+	Item sensor_meat_temp received update
+then
+	postUpdate(GrillTemperature_LastUpdate, new DateTimeType())
+end
+

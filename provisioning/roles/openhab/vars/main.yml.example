@@ -1,0 +1,59 @@
+# these must be replaced by real values in vars/main.yml and encryptet with ansible-vault
+
+mail_smtp_server: "smtp.myprovider.com"
+mail_username: "my_username"
+mail_password: "my_pwd"
+mail_from: "me@myprovider.com"
+
+prowl_api_key: 1234567890abcdef1234567890abcdef12345678
+
+philips_hue_ip: "192.168.100.20"
+philips_hue_secret: "mysecret"
+
+xbmc_livingroom_password: "xbmcpass"
+xbmc_bedroom_password: "xbmcpass"
+
+
+sus_email: "theone@wife.com"
+fred_email: "himself@me.com"
+
+bedroom_sus_1: "1234.1"
+bedroom_sus_2: "1234.2"
+bedroom_sus_3: "2345.1"
+bedroom_sus_3: "2345.2"
+
+bedroom_fred_1: "address=0x0003456,unit=1"
+bedroom_fred_2: "address=0x0003456,unit=2"
+bedroom_fred_3: "address=0x0005678,unit=1"
+bedroom_fred_4: "address=0x0005678,unit=2"
+
+bedroom_celing_lamp: "6789.2"
+bedroom_spot: "6789.1"
+
+hall_photo_frame: "9876.2"
+
+hall_pir: "8765.1"
+
+kitchen_dice: "7654.1"
+kitchen_celing: "7654.2"
+kitchen_bench: "12345.1"
+kitchen_pir: "23456.1"
+
+livingroom_switch_bottom_left: "34567.1"
+livingroom_foscarini: "34567.2"
+livingroom_havana: "45678.1"
+livingroom_unnu: "45678.1"
+
+fusebox_magnet: "56789.1"
+
+outdoor_temperature: "9123"
+bedroom_temperature: "92345"
+livingroom_temperature: "93456"
+guestroom_temperature: "94567"
+office_temperature: "95678"
+grill_temperature: "96789"
+
+smoke_detector: "1234567"
+
+christmastree_lights: "address=0x0081234,unit=1"
+

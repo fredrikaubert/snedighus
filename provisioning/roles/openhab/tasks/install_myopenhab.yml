@@ -1,0 +1,35 @@
+
+- name: check if my.openhab.org is installed
+  shell: ls {{ openhab_install_dir }}/myopenhab.org/org.openhab.io.myopenhab-{{my_openhab_version}}.jar
+  ignore_errors: yes
+  register: myopenhab_ls
+  
+  
+- name: create myopenhab.org directory
+  file: >
+    state=directory
+    path={{ openhab_install_dir }}/myopenhab.org
+  when:  myopenhab_ls.rc != 0
+
+
+- name: download my openhab
+  get_url: >
+    url=https://my.openhab.org/downloads/org.openhab.io.myopenhab-{{my_openhab_version}}.jar
+    dest={{ openhab_install_dir }}/myopenhab.org/org.openhab.io.myopenhab-{{my_openhab_version}}.jar
+  when:  myopenhab_ls.rc != 0
+
+
+- name: link my openhab bindings
+  file: >
+    state=link
+    src={{ openhab_install_dir }}/myopenhab.org/org.openhab.io.myopenhab-{{my_openhab_version}}.jar
+    dest={{ openhab_install_dir }}/runtime/{{openhab_version}}/addons/org.openhab.io.{{item}}-{{my_openhab_version}}.jar
+  with_items:
+    - "myopenhab"
+
+- name: copy secret files to connect to openhab
+  template: 
+    src=webapps/static/{{item}} dest={{ openhab_install_dir }}/runtime/{{openhab_version}}/webapps/static/{{item}}
+  with_items:
+    - "secret"
+    - "uuid"

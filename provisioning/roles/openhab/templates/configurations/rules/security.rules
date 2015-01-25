@@ -1,0 +1,66 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
+
+var Timer timerSecurityDisarm = null
+
+
+rule "SecurityBreach" 
+when 
+	Item Security received command ON
+then
+	if(Security_Mode == 1) {
+		if(timerSecurityDisarm == null) {
+			createTimer(now.plusSeconds(600)) [|
+				if(Security_Mode.state == 1) {
+					sendNotification("{{fred_email}}", "Alarm utløst")
+					sendMail("{{fred_email}}", "[Openhab] Security Alert", "Alarmen ble utløst.")
+				}
+			]
+		}
+	}
+end
+
+
+rule "SecurityDisarm"
+when
+	Item Security_Mode changed to 0
+then
+	if(timerSecurityDisarm !=null) {		
+		timerSecurityDisarm.cancel
+		timerSecurityDisarm = null
+		say("Alarm disarmed. ")
+		sendMail("{{fred_email}}", "[Openhab] Security Disarmed Event", "Alarmen ble skrudd av.")
+		
+	}
+end
+
+
+rule "FuseboxOpen"
+when 
+	Item stairway_fusebox_magswitch received command ON
+then
+	logInfo("org.openhab.security", "Sikringsskapet er åpnet.")
+	sendNotification("{{fred_email}}", "Sikringsskapet er blitt åpnet")
+	sendMail("{{fred_email}}", "[Openhab] Security Alert", "Sikringsskapet har blitt åpnet.")
+
+end
+    
+    
+rule "FireAlarm"
+when
+	Item smoke_detector received update
+then
+	if(!smoke_detector.updatedSince(now.minusSeconds(20))) {
+	
+		sendNotification("{{fred_email}}", "Røykvarsler utløst!!")
+		sendNotification("{{sus_email}}", "Røykvarsler utløst!!")
+		sendMail("{{fred_email}}", "[openhab] Røykvarlser utløst", "Røykvarsleren er utløst.")
+		setMasterVolume(1.0f)
+		say("Fire alert. Please put out fire.")	
+		logInfo("org.openhab.security", "Røykvarsler utløst.")
+	}
+	
+end
+

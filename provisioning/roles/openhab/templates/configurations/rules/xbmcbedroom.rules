@@ -1,0 +1,87 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
+var Timer timerXbmcBedRoom = null
+
+
+rule "Player Play"
+when
+	Item BedRoom_Player_State changed from Pause to Play or 
+	Item BedRoom_Player_State changed from Stop to Play 
+then
+		if( timerXbmcBedRoom!=null ) {	
+			timerXbmcBedRoom.cancel
+		}	
+		timerXbmcBedRoom = createTimer(now.plusSeconds(1)) [|
+			logInfo("org.openhab.rules", "Timer xbmcBedRoom expired. Executing command")
+			
+			if(BedRoom_Player_Kind.state != "song") {
+				sendCommand(Scene_Bedrom, 0)
+			}
+			
+			if(timerXbmcBedRoom!=null) {
+				if(timerXbmcBedRoom.running) {
+					timerXbmcBedRoom.cancel()
+				}
+				timerXbmcBedRoom = null
+			}	
+		]	
+end
+
+
+
+rule "Player Pause"
+when
+	Item BedRoom_Player_State changed from Stop to Pause or
+	Item BedRoom_Player_State changed from Play to Pause
+then
+	
+		if( timerXbmcBedRoom!=null ) {	
+			timerXbmcBedRoom.cancel
+		}	
+		timerXbmcBedRoom = createTimer(now.plusSeconds(1)) [|
+			logInfo("org.openhab.rules", "Timer xbmcBedRoom expired. Executing command")
+			if(BedRoom_Player_Kind.state != "song") {
+			sendCommand(Scene_Bedrom, 4)
+			}
+			if(timerXbmcBedRoom!=null) {
+				if(timerXbmcBedRoom.running) {
+					timerXbmcBedRoom.cancel()
+				}
+				timerXbmcBedRoom = null
+			}	
+		]
+		
+end
+
+
+
+
+rule "Player Stops" 
+when 
+	Item BedRoom_Player_State changed from Play to Stop or
+	Item BedRoom_Player_State changed from Pause to Stop or
+	Item BedRoom_Player_State changed from End to Stop
+	
+then
+	if(Scene_Bedrom.state != 1) {
+		if( timerXbmcBedRoom!=null ) {	
+			timerXbmcBedRoom.cancel
+		}	
+		timerXbmcBedRoom = createTimer(now.plusSeconds(1)) [|
+			logInfo("org.openhab.rules", "Timer xbmcBedRoom expired. Executing command")
+			sendCommand(Scene_Bedrom, 1)
+			if(timerXbmcBedRoom!=null) {
+				if(timerXbmcBedRoom.running) {
+					timerXbmcBedRoom.cancel()
+				}
+				timerXbmcBedRoom = null
+			}	
+		]
+		
+	}
+end
+
+
+    

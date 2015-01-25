@@ -1,0 +1,86 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+import org.openhab.action.squeezebox.*
+
+import java.util.concurrent.locks.ReentrantLock
+
+var Timer timer1 = null
+var java.util.concurrent.locks.ReentrantLock lock1 = new java.util.concurrent.locks.ReentrantLock()
+
+rule "Initialization"
+ when 
+   System started
+ then
+     postUpdate(alarmClockHours,  7)
+     postUpdate(alarmClockMinutes, 30)
+     postUpdate(alarmMonday,     ON)
+     postUpdate(alarmMonday,   ON)
+     postUpdate(alarmWednesday,   ON)
+     postUpdate(alarmThursday, ON)
+     postUpdate(alarmFriday,    ON)
+     postUpdate(alarmSaturday,    OFF)
+     postUpdate(alarmSunday,    OFF)
+ end
+
+rule "Alarm time"
+when
+    Item alarmClockHours changed or 
+    Item alarmClockMinutes changed
+then
+  lock1.lock()
+  try {
+
+  var String msg = ""
+  var stunde = alarmClockHours.state as DecimalType
+  var minute = alarmClockMinutes.state as DecimalType
+
+  if (stunde < 10) { msg = "0" } 
+  msg = msg + alarmClockHours.state.format("%d") + ":"
+
+  if (minute < 10) { msg = msg + "0" }
+  msg = msg + alarmClockMinutes.state.format("%d")
+  postUpdate(alarmClockMessage,msg)
+
+  var int weckzeit1
+  weckzeit1 = (alarmClockHours.state as DecimalType).intValue * 60 + 
+              (alarmClockMinutes.state as DecimalType).intValue
+  weckzeit1 = weckzeit1.intValue
+
+  var int jetzt1
+  jetzt1 = now.getMinuteOfDay
+  jetzt1 = jetzt1.intValue
+
+  var int delta1
+  if (timer1 != null) {
+    timer1.cancel
+    timer1 = null
+  }
+
+  delta1 = (weckzeit1 - jetzt1)
+  delta1 = delta1.intValue
+
+  if (jetzt1 > weckzeit1) { delta1 = delta1 + 1440 }
+
+  timer1 = createTimer(now.plusMinutes(delta1)) [|
+    var Number day = now.getDayOfWeek
+    if (((day == 1) && (alarmMonday.state == ON))     ||
+        ((day == 2) && (alarmTuesday.state == ON))   ||
+        ((day == 3) && (alarmWednesday.state == ON))   ||
+        ((day == 4) && (alarmThursday.state == ON)) ||
+        ((day == 5) && (alarmFriday.state == ON))    ||
+        ((day == 6) && (alarmSaturday.state == ON))    ||
+        ((day == 7) && (alarmSunday.state == ON))
+        ) {
+       		sendCommand(Scene_Bedrom, 1)
+       		if(House_Nightmode.state == ON) {
+       			sendCommand( House_Nightmode, OFF)
+       		}
+        }
+       timer1.reschedule(now.plusHours(24))
+     ]
+    
+  } finally  {
+     lock1.unlock()
+  }
+end

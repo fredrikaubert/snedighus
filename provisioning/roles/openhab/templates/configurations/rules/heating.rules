@@ -1,0 +1,23 @@
+rule "Heating off"
+when
+	Item Proximity changed from ON to OFF or
+	Item House_Nightmode changed from OFF to ON
+then
+	logInfo("org.openhab.rules","Switching off all heating (nightmode or leaving house)")
+	sendCommand(Heating, OFF)
+end
+
+
+rule "Heating on"
+when
+	Item Proximity changed from OFF to ON or
+	Item House_Nightmode changed from ON to OFF
+then
+	if(Proximity.state == ON && House_Nightmode.state == OFF) {
+		logInfo("org.openhab.rules","Switching on all heating")
+		sendCommand(Heating, ON)
+	} else {
+		logInfo("org.openhab.rules","Heating on rule: Not doing anything. Conditions not met. Proximity state:" + Proximity.state + "House nightmode:" + House_Nightmode.state )
+	}
+	
+end

@@ -1,0 +1,97 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
+var Timer timerXbmcLivingRoom = null
+
+
+rule "Player Play"
+when
+	Item LivingRoom_Player_State changed from Pause to Play or 
+	Item LivingRoom_Player_State changed from Stop to Play or
+	Item LivingRoom_Player_Allowed_To_Change_Lights changed from OFF to ON
+then
+	if(LivingRoom_Player_Allowed_To_Change_Lights.state == ON && LivingRoom_Player_State.state == "Play") {
+		if( timerXbmcLivingRoom!=null ) {	
+			timerXbmcLivingRoom.cancel
+		}	
+		timerXbmcLivingRoom = createTimer(now.plusSeconds(1)) [|
+			logInfo("org.openhab.rules", "Timer xbmcLivingRoom expired. Executing command")
+			
+			if(LivingRoom_Player_Kind.state != "song") {
+				sendCommand(Scene_LivingRoom, 2)
+				sendCommand(Scene_Hall, 0)
+			}
+			
+			if(timerXbmcLivingRoom!=null) {
+				if(timerXbmcLivingRoom.running) {
+					timerXbmcLivingRoom.cancel()
+				}
+				timerXbmcLivingRoom = null
+			}	
+		]
+	}			
+	
+end
+
+rule "Player Pause"
+when
+	Item LivingRoom_Player_State changed from Stop to Pause or
+	Item LivingRoom_Player_State changed from Play to Pause 
+then
+	if(LivingRoom_Player_Allowed_To_Change_Lights.state == ON ) {
+		if( timerXbmcLivingRoom!=null ) {	
+			timerXbmcLivingRoom.cancel
+		}	
+		timerXbmcLivingRoom = createTimer(now.plusSeconds(1)) [|
+			logInfo("org.openhab.rules", "Timer xbmcLivingRoom expired. Executing command")
+			if(LivingRoom_Player_Kind.state != "song") {
+			sendCommand(Scene_LivingRoom, 4)
+			}
+			if(timerXbmcLivingRoom!=null) {
+				if(timerXbmcLivingRoom.running) {
+					timerXbmcLivingRoom.cancel()
+				}
+				timerXbmcLivingRoom = null
+			}	
+		]
+		
+	}
+		
+end
+
+
+
+rule "Player Stops" 
+when 
+	Item LivingRoom_Player_State changed from Play to Stop or
+	Item LivingRoom_Player_State changed from Pause to Stop or
+	Item LivingRoom_Player_State changed from End to Stop
+	
+	
+then
+	if(LivingRoom_Player_Allowed_To_Change_Lights.state == ON ) {
+		if(Scene_LivingRoom.state != 1) {
+			if( timerXbmcLivingRoom!=null ) {	
+				timerXbmcLivingRoom.cancel
+			}	
+			timerXbmcLivingRoom = createTimer(now.plusSeconds(1)) [|
+				logInfo("org.openhab.rules", "Timer xbmcLivingRoom expired. Executing command")
+				sendCommand(Scene_LivingRoom, 1)
+				if(timerXbmcLivingRoom!=null) {
+					if(timerXbmcLivingRoom.running) {
+						timerXbmcLivingRoom.cancel()
+					}
+					timerXbmcLivingRoom = null
+				}	
+			]
+			
+		}
+	
+	}
+end
+
+
+
+
+    

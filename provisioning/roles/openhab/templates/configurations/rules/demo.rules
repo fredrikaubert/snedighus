@@ -1,0 +1,359 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
+var Timer timerPirHall = null
+var Timer timerPirKitchen = null
+
+
+rule "Scene LivingRoom Change" 
+when 
+	Item Scene_LivingRoom received command
+then
+	switch(receivedCommand) {
+		case 0: { //OFF
+			sendCommand(LivingRoomLights, OFF) 
+		}
+		
+		case 1: { //Normal
+			sendCommand(td_device_1, 80)  
+		 	sendCommand(td_device_2, 80)
+		 	sendCommand(Light_Livingroom_Lightstrip_Hue, "55,40,80")
+			sendCommand(td_device_3, 80)
+			
+			sendCommand(Light_Livingroom_Montana_Hue, "62,50,80")
+			sendCommand(Light_Livingroom_Dining_Table_Hue, "62,50,80")
+			
+			sendCommand(hallPhotoFrame, ON)
+			
+		}
+		
+		case 2: { //TV
+			sendCommand(Light_Livingroom_Dining_Table_Hue, OFF)
+			sendCommand(td_device_1, OFF)
+			sendCommand(td_device_2, OFF)
+			sendCommand(Light_Livingroom_Lightstrip_Hue, "58,28,1")
+			sendCommand(td_device_3, 20)
+			//1: Color, 0=hvitt lys, 100= Max Color, 0=Svart, 100=Full styrke
+			//http://de.wikipedia.org/wiki/HSB-Farbraum
+			sendCommand(Light_Livingroom_Montana_Hue, "68,80,20")
+			
+			sendCommand(Light_Hall_Celing_Dimmer, OFF)
+			sendCommand(hallPhotoFrame, OFF)
+			
+		}
+		
+		
+		case 3:{ //Night
+			sendCommand(Lights, OFF)
+			sendCommand(hallPhotoFrame, OFF)
+		}
+		
+		case 4:{ //Cozy
+			sendCommand(td_device_1, 50)
+			sendCommand(td_device_2, 50)
+			sendCommand(Light_Livingroom_Lightstrip_Hue, "55,40,66")
+			sendCommand(td_device_3, 50)
+			sendCommand(Light_Livingroom_Montana_Hue, "65,70,50")
+			sendCommand(Light_Livingroom_Dining_Table_Hue, "65,70,30")
+			
+			sendCommand(hallPhotoFrame, ON)
+		}
+		case 5:{ //Max/Clean
+			sendCommand(td_device_1, 100)
+			sendCommand(td_device_2, 100)
+			sendCommand(Light_Livingroom_Lightstrip_Hue, "60,35,100")
+			sendCommand(td_device_3, 100)
+			sendCommand(Light_Livingroom_Montana_Hue, "60,35,100")
+			sendCommand(Light_Livingroom_Dining_Table_Hue, "60,35,100")
+			
+			sendCommand(hallPhotoFrame, ON)
+		}
+		
+		case 100: { //night-light
+			sendCommand(td_device_1, 4)
+			sendCommand(td_device_2, 4)
+			sendCommand(Light_Livingroom_Lightstrip_Hue, "55,40,10")
+			sendCommand(td_device_3, 6)
+			sendCommand(Light_Livingroom_Montana_Hue, "65,70,10")
+			sendCommand(Light_Livingroom_Dining_Table_Hue, "60,35,10")
+		}
+		
+		
+	}		
+end
+
+rule "Bedroom Scene Change" 
+when 
+	Item Scene_Bedrom received command
+then
+	switch(receivedCommand) {
+		case 0:{ 
+			sendCommand(td_device_11, OFF) 
+			sendCommand(bedroom_wall_upwards, OFF) 
+			sendCommand(bedroom_wall_downwards, OFF) 
+			sendCommand(td_device_13, OFF)
+			sendCommand(bedroom_counter, OFF)
+		} 
+		
+		
+		case 1: { //Normal
+			sendCommand(td_device_11, ON)
+			sendCommand(bedroom_wall_upwards, "62,50,80") 
+			sendCommand(bedroom_wall_downwards, "62,50,80") 
+			sendCommand(td_device_13, ON)
+			sendCommand(bedroom_counter, "62,50,80")
+			
+		}
+		
+		case 2: { //TV
+			sendCommand(td_device_11, OFF)
+			sendCommand(bedroom_wall_upwards, "68,80,20") 
+			sendCommand(bedroom_wall_downwards, "68,80,20") 
+			sendCommand(td_device_13, OFF)
+			sendCommand(bedroom_counter, "68,80,20")
+		}
+		
+		
+		case 4:{ //Cozy
+			sendCommand(td_device_11, OFF)
+			sendCommand(bedroom_wall_upwards, "65,70,50") 
+			sendCommand(bedroom_wall_downwards, "65,70,50") 
+			sendCommand(td_device_13, OFF)
+			sendCommand(bedroom_counter, "65,70,50")
+	
+		}
+		
+		case 100:{ //Night
+			sendCommand(td_device_11, OFF)
+			sendCommand(bedroom_wall_upwards, "65,70,10") 
+			sendCommand(bedroom_wall_downwards, "65,70,10") 
+			sendCommand(td_device_13, OFF)
+			sendCommand(bedroom_counter, "65,70,10")
+	
+		}
+	}		
+end
+
+
+rule "Office Scene Change" 
+when 
+	Item Scene_Office received command
+then
+	switch(receivedCommand) {
+		case 0:{ 
+			sendCommand(officeLights, OFF) 
+		} 
+		
+		
+		case 1: { //Normal
+			sendCommand(Light_Office_Dimmer, 80)
+			
+		}
+		
+		case 2: { //TV
+			sendCommand(Light_Office_Dimmer, 50)
+		}
+		
+		
+		case 4:{ //Cozy
+			sendCommand(Light_Office_Dimmer, 50)
+	
+		}
+		
+		case 5:{ //Max
+			sendCommand(Light_Office_Dimmer, 100)
+	
+		}
+		
+		case 100:{ //Night
+			sendCommand(Light_Office_Dimmer, 30)
+	
+		}
+	}		
+end
+
+
+rule "Guestroom Scene Change" 
+when 
+	Item Scene_Guestroom received command
+then
+	switch(receivedCommand) {
+		case 0: {
+			sendCommand(Light_GuestRoom_Dimmer, OFF)
+			sendCommand(Light_GuestRoom_Closet, OFF)
+		}
+		
+		case 1: { //Normal
+			sendCommand(Light_GuestRoom_Dimmer, 80)
+			sendCommand(Light_GuestRoom_Closet, 80)
+			
+		}
+		
+		case 2: { //Cozy
+			sendCommand(Light_GuestRoom_Dimmer, 30)
+			sendCommand(Light_GuestRoom_Closet, 40)
+		}
+		
+		
+		case 3:{ //Max
+			sendCommand(Light_GuestRoom_Dimmer, 100)
+			sendCommand(Light_GuestRoom_Closet, 100)
+		}
+		
+		case 100:{ //Night
+			sendCommand(Light_GuestRoom_Dimmer, 10)
+			sendCommand(Light_GuestRoom_Closet, 10)
+		}
+	}		
+end
+
+
+rule "Hall Scene Change" 
+when 
+	Item Scene_Hall received command
+then
+	switch(receivedCommand) {
+		case 0: { //Off
+			sendCommand(Light_Hall_Celing_Dimmer, OFF)
+		}
+		
+		case 1: { //Normal
+			sendCommand(Light_Hall_Celing_Dimmer, 93)
+		}
+		
+		case 3:{ //Max
+			sendCommand(Light_Hall_Celing_Dimmer, 100)
+		}
+		
+		case 100: { //night-light
+			sendCommand(Light_Hall_Celing_Dimmer, 30)
+		}
+	}		
+end
+
+
+
+rule "Kitchen Scene Change" 
+when 
+	Item Scene_Kitchen received command
+then
+	switch(receivedCommand) {
+		case 0: {
+			sendCommand( td_device_9, OFF )
+			sendCommand( td_device_10, OFF )
+			sendCommand( kitchenLightDice, OFF )
+			sendCommand( Light_KitchenTable_Dimmer, OFF)
+			}
+		
+		case 1: { //Normal
+			sendCommand( td_device_9, ON )
+			sendCommand( td_device_10, ON )
+			sendCommand( kitchenLightDice, ON )
+			sendCommand( Light_KitchenTable_Dimmer, 75)
+			
+		}
+		
+		case 2: { //Eat
+			sendCommand( td_device_9, OFF )
+			sendCommand( td_device_10, OFF )
+			sendCommand( kitchenLightDice, ON )
+			sendCommand( Light_KitchenTable_Dimmer, 80)
+		}
+		
+		
+		case 3:{ //Night
+			sendCommand( td_device_9, OFF )
+			sendCommand( td_device_10, OFF )
+			sendCommand( kitchenLightDice, ON )
+			sendCommand( Light_KitchenTable_Dimmer, 40)
+		}
+		
+		case 4:{ //Cozy
+			sendCommand( td_device_9, ON )
+			sendCommand( td_device_10, OFF )
+			sendCommand( kitchenLightDice, ON )
+			sendCommand( Light_KitchenTable_Dimmer, 65)
+		}
+		case 5:{ //Max/Clean
+			sendCommand( td_device_9, ON )
+			sendCommand( td_device_10, ON )
+			sendCommand( kitchenLightDice, ON )
+			sendCommand( Light_KitchenTable_Dimmer, 100)
+		}
+		
+		case 100: { //night-light
+			sendCommand(Light_KitchenTable_Dimmer, 50)
+		}
+	}		
+end
+
+
+
+
+/** shows how to use sensor values from the past */
+rule "Autolight Hallway"
+when
+	Item hall_pir received update ON
+then
+	logInfo("org.openhab.rules","hall_pir detected")
+	if(timerPirHall==null) {
+		if(House_Nightmode.state == ON ) {
+			sendCommand(Scene_Hall, 100)
+		} else {
+			sendCommand(Scene_Hall, 1)
+		}
+		timerPirHall = createTimer(now.plusSeconds(120)) [|
+			sendCommand(Scene_Hall, 0)
+			if(timerPirHall!=null) {
+				timerPirHall.cancel()
+				timerPirHall = null
+			}	
+		]
+	} else {
+		timerPirHall.reschedule(now.plusSeconds(600))
+	}
+end
+
+/** shows how to use sensor values from the past */
+rule "Cancel Autolight Hall"
+when 
+	Item Light_Hall_Celing_Dimmer changed
+then
+	if(timerPirHall!=null) {
+		timerPirHall.cancel
+		timerPirHall = null
+	}
+end
+
+
+rule "Autolight Kitchen"
+when
+	Item td_device_24  received update ON
+then
+		if(timerPirKitchen==null) {
+			if(House_Nightmode.state == ON ) {
+				sendCommand(Scene_Kitchen, 100)
+			} else {
+				sendCommand( Scene_Kitchen, 1 )
+			}
+			
+			
+			
+			timerPirKitchen = createTimer(now.plusSeconds(600)) [|
+				sendCommand( Scene_Kitchen, 0 )
+				if(timerPirKitchen!=null) {
+					timerPirKitchen.cancel
+					timerPirKitchen = null
+				}	
+			]
+		} else {
+			timerPirKitchen.reschedule(now.plusSeconds(600))
+		}
+end
+
+
+
+
+
+    

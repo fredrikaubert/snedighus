@@ -1,0 +1,269 @@
+
+sitemap default label="Leiligheten" {
+
+	Frame {
+		Switch item=Scene_LivingRoom label="Stue" mappings=[0=Off, 1=Normal, 2=Tv, 4=Cozy]
+		Switch item=Scene_Kitchen label="Kjøkken" mappings=[0=Off, 1=Normal, 2=Eat, 5=Cleaning]
+		Switch item=Scene_Hall label="Gang" mappings=[0=Off, 1=Normal, 2=Eat, 5=Cleaning]
+		Switch item=Scene_Bedrom label="Soverom" mappings=[0=Off, 1=Normal, 2=Tv, 4=Cozy]
+		Switch item=Scene_Office label="Kontor" mappings=[0=Off, 1=Normal, 4=Cozy, 5=Max]
+		Switch item=Scene_Guestroom label="Barnerom" mappings=[0=Off, 1=Normal, 4=Cozy, 100=Natt]
+	}	
+	
+	
+	Frame {
+		Text item=td_sensor_oregon_217_1 icon="sofa" valuecolor=[LivingroomTemperature_LastUpdate=="Uninitialized"="lightgray",LivingroomTemperature_LastUpdate>900="lightgray",>28="red",>23="orange",>21="green",>18="orange",<=18="red"] {
+			Frame {
+				Switch item=Scene_LivingRoom label="Stue" mappings=[0=Off, 1=Normal, 2=Tv, 4=Cozy]
+				Selection item=Scene_LivingRoom label="Stue" mappings=[0=Off, 1=Normal, 2=Tv, 4=Cozy,5=Cleaning, 100=Night]
+			}
+			
+			Frame {
+				Text item=td_sensor_oregon_217_1 valuecolor=[LivingroomTemperature_LastUpdate=="Uninitialized"="lightgray",LivingroomTemperature_LastUpdate>900="lightgray",>28="red",>23="orange",>21="green",>18="orange",<=18="red"]
+				Text item=td_sensor_oregon_217_2 valuecolor=[LivingroomTemperature_LastUpdate=="Uninitialized"="lightgray",LivingroomTemperature_LastUpdate>900="lightgray",>50="red",>40="orange",>20="green",>5="orange",<=5="red"]
+			}
+			
+			Frame {
+				Switch item=livingRoomOven
+			}
+			
+			Frame label="kodi" {
+				Switch item=LivingRoom_Player_Allowed_To_Change_Lights label="Kan endre lys"
+				Text item=LivingRoom_Player_Kind label="[%s]"
+				Text item=LivingRoom_Player_State label="[%s]"
+				Text item=LivingRoom_Player_Album
+			}
+
+			Frame {
+				Slider item=td_device_1 label="Stua Foscarini"
+				Slider item=td_device_2 label="Stua Havana"
+				Slider item=td_device_3 label="Stua Unnu"
+				Colorpicker item=Light_Livingroom_Montana_Hue label="Stua Montana"
+				Colorpicker item=Light_Livingroom_Dining_Table_Hue label="Stua Spiseplass"
+				Colorpicker item=Light_Livingroom_Lightstrip_Hue label="Stua lightstrip"
+			}				
+		}
+	}
+
+	Frame {
+		
+		Text label="Kjøkken" icon="groundfloor" {
+			Frame {
+				Switch item=Scene_Kitchen label="Scene" mappings=[0=Off, 1=Normal, 2=Eat, 5=Cleaning]
+			}
+			Frame {
+				Switch item=td_device_9
+				Switch item=td_device_10
+				Switch item=kitchenLightDice
+				Slider item=Light_KitchenTable_Dimmer
+			}
+			
+			Frame {
+				Switch item=kitchenWallOven
+			}
+		}
+	}
+	
+	Frame {
+		
+		Text label="Gang" icon="corridor" {
+			Frame {
+				Switch item=Scene_Hall label="Gang" mappings=[0=Off, 1=Normal, 2=Eat, 5=Cleaning]
+				Slider item=Light_Hall_Celing_Dimmer label="Gang tak"
+				Switch item=hallDoorlock
+				Switch item=hallPhotoFrame
+			}
+		}
+	}
+
+
+	Frame {
+		Text item=td_sensor_oregon_111_1 icon="bedroom" valuecolor=[BedroomTemperature_LastUpdate=="Uninitialized"="lightgray",BedroomTemperature_LastUpdate>900="lightgray",>25="red",>21="orange",>15="green",>10="orange",<=10="red"] {
+			Frame {
+				Switch item=Scene_Bedrom label="Scene" mappings=[0=Off, 1=Normal, 2=Tv, 4=Cozy]
+			}
+			
+			Frame {
+				Text item=td_sensor_oregon_111_1 valuecolor=[BedroomTemperature_LastUpdate=="Uninitialized"="lightgray",BedroomTemperature_LastUpdate>900="lightgray",>25="red",>21="orange",>15="green",>10="orange",<=10="red"]
+				Text item=td_sensor_oregon_111_2 valuecolor=[BedroomTemperature_LastUpdate=="Uninitialized"="lightgray",BedroomTemperature_LastUpdate>900="lightgray",>50="red",>40="orange",>20="green",>5="orange",<=5="red"]
+				Text item=td_sensor_oregon_111_3
+			}
+			
+			Frame {
+				Text label="Alarm [%s]" item=alarmClockMessage icon="clock" {
+	            	Frame label="Tid" {
+		                Setpoint item=alarmClockHours minValue=0 maxValue=23 step=1
+		                Setpoint item=alarmClockMinutes minValue=0 maxValue=55 step=5
+		            }
+		            Frame label="Ukedager" {
+		                Switch item=alarmMonday
+		                Switch item=alarmTuesday
+		                Switch item=alarmWednesday
+		                Switch item=alarmThursday
+		                Switch item=alarmFriday
+		                Switch item=alarmSaturday
+		                Switch item=alarmSunday
+		            }
+		        }
+	        
+	        }
+			
+			Frame label="kodi" {
+				Switch item=BedRoom_Player_Allowed_To_Change_Lights label="Kan endre lys"
+				Text item=BedRoom_Player_Kind label="[%s]"
+				Text item=BedRoom_Player_State label="[%s]"
+				Text item=BedRoom_Player_Album
+			}
+			
+			Frame {
+				Switch item=td_device_11 label="Soverom tak"
+				Colorpicker item=bedroom_wall_downwards label="Soverom vegg ned"
+				Colorpicker item=bedroom_wall_upwards label="Soverom vegg opp"
+				Switch item=td_device_13 label="Soverom takspot"
+				Colorpicker item=bedroom_counter label="Soverom Benk"
+				Slider item=bedroom_bedside_sus label="Sus nattbord"
+				Slider item=bedroom_bedside_fred label="Fred nattbord"
+			}			
+		}
+	}
+
+
+
+	Frame {
+		
+		Text item=sensor_office_temp icon="office" valuecolor=[OfficeTemperature_LastUpdate=="Uninitialized"="lightgray",OfficeTemperature_LastUpdate>900="lightgray",>28="red",>23="orange",>20="green",>18="orange",<=18="red"]{
+			Frame {
+				Switch item=Scene_Office label="Kontor" mappings=[0=Off, 1=Normal, 4=Cozy, 5=Max]
+			}
+			
+			Frame {
+				Text item=sensor_office_temp  valuecolor=[OfficeTemperature_LastUpdate=="Uninitialized"="lightgray",OfficeTemperature_LastUpdate>900="lightgray",>28="red",>23="orange",>20="green",>18="orange",<=18="red"]			
+			}
+			
+			Frame {
+				Slider item=Light_Office_Dimmer
+			}
+
+			Frame {
+				Switch item=proximityOfficeOccupied label="Gjester"
+			}
+		}
+	}
+
+		
+	Frame {
+		
+		Text item=td_sensor_oregon_guestroom_temp icon="bedroom" valuecolor=[GuestroomTemperature_LastUpdate=="Uninitialized"="lightgray",GuestroomTemperature_LastUpdate>900="lightgray",>28="red",>23="orange",>20="green",>18="orange",<=18="red"]{
+			Frame {
+				Switch item=Scene_Guestroom label="Barnerom" mappings=[0=Off, 1=Normal, 3=Max,4=Cozy, 100=Natt]
+			}
+
+			Frame {
+				Text item=td_sensor_oregon_guestroom_temp valuecolor=[GuestroomTemperature_LastUpdate=="Uninitialized"="lightgray",GuestroomTemperature_LastUpdate>900="lightgray",>28="red",>23="orange",>20="green",>18="orange",<=18="red"]
+				Text item=td_sensor_oregon_guestroom_humidity valuecolor=[GuestroomTemperature_LastUpdate=="Uninitialized"="lightgray",GuestroomTemperature_LastUpdate>900="lightgray",>50="red",>40="orange",>20="green",>5="orange",<=5="red"]
+			}
+			
+			Frame {
+				Slider item=Light_GuestRoom_Dimmer
+				Slider item=Light_GuestRoom_Closet
+			}
+
+			Frame {
+				Switch item=proximityGuestroomOccupied label="Gjester"
+			}
+
+		}
+	}
+	
+	
+	Frame {
+		Text item=td_sensor_oregon_53_1 valuecolor=[OutdoorTemperature_LastUpdate=="Uninitialized"="lightgray",OutdoorTemperature_LastUpdate>900="lightgray",>0="red",<=0="blue"] {
+			Frame {
+				Text item=td_sensor_oregon_53_1 valuecolor=[OutdoorTemperature_LastUpdate=="Uninitialized"="lightgray",OutdoorTemperature_LastUpdate>900="lightgray",>0="red",<=0="blue"]
+				Text item=td_sensor_oregon_53_2 valuecolor=[OutdoorTemperature_LastUpdate=="Uninitialized"="lightgray",OutdoorTemperature_LastUpdate>900="lightgray",>50="red",>40="orange",>20="green",>5="orange",<=5="red"]
+			}
+			
+			Frame {
+				Switch item=christmas_tree_lights
+			}
+			
+			Frame {
+				Selection item=grill_meat_type label="Kjøttype" mappings=[0=Storfe, 1=Lam, 2=Svin, 3=Kylling]
+				Setpoint item=grill_meat_target_temp step=0.5
+				Text item=sensor_meat_temp valuecolor=[GrillTemperature_LastUpdate=="Uninitialized"="lightgray",GrillTemperature_LastUpdate>900="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]
+			}
+			
+		}	
+	}
+		
+	Frame {
+		Switch item=House_Nightmode label="Nattmodus"
+	}
+	
+	Frame label="Status" {
+		
+		Group item=Proximity
+		
+		Group item=InsideTemperature
+		
+		Group item=BatteryLevel label="Batteri" icon="energy"
+		Group item=Energy
+		Text item=Power icon="energy" {
+			Frame {
+				Text item=livingRoomOvenPower
+				Text item=kitchenWallOvenPower
+				
+			}
+			Frame {
+				Switch item=Power_Chart_Period label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"] icon="energy"
+				Chart item=Power_Chart period=h refresh=300 visibility=[Power_Chart_Period==0, Power_Chart_Period=="Uninitialized"]
+				Chart item=Power_Chart period=D refresh=1800 visibility=[Power_Chart_Period==1]
+				Chart item=Power_Chart period=W refresh=3600 visibility=[Power_Chart_Period==2]
+			}
+		}
+		
+		Text item=cpuCombined icon="system" {
+			Frame {
+				Text item=uptime
+			}
+			Frame label="Load" {
+				Text item=loadAverage1min
+				Text item=loadAverage5min
+				Text item=loadAverage15min
+			}
+			Frame label="Minnebruk" {
+				Text item=memFreePercent  
+				Text item=memUsed 
+				Text item=memUsedPercent
+				Text item=memActualFree 
+				Text item=memActualUsed 
+				Text item=memTotal 
+				
+				Switch item=medFreePercentPeriod label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"] icon="energy"
+				Chart item=memFreePercent period=h refresh=300 visibility=[medFreePercentPeriod==0, medFreePercentPeriod=="Uninitialized"]
+				Chart item=memFreePercent period=D refresh=1800 visibility=[medFreePercentPeriod==1]
+				Chart item=memFreePercent period=W refresh=3600 visibility=[medFreePercentPeriod==2]
+			}
+			
+			Frame label="Swap" {
+				Text item=swapFree 
+				Text item=swapTotal
+				Text item=swapUsed 
+			}
+			
+			Frame label="Openhab" {
+				Text item=openhabRealMem
+				Text item=openhabVirtualMem
+				Text item=openhabCpuPercent
+				Text item=openhabCpuSystem
+				Text item=openhabUptime
+				Text item=openhabUptimeFormatted
+				
+			}
+		}
+	}
+
+	
+
+}
+

@@ -1,0 +1,15 @@
+- name: Install lsof for use in other scripts
+  apt: name=lsof update_cache=yes
+  sudo: true
+
+    
+- name: Don't start window manager on boot
+  command: 'update-rc.d -f lightdm remove'    
+  sudo: true
+  
+
+# TODO: Resize image using fdisk. 
+
+  
+# - name: 'Reboot'
+#  command: /sbin/reboot -t now

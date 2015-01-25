@@ -1,0 +1,17 @@
+#
+# 	Hardware:
+#   	AeoTec Z-Stick Series 2 - with Silicon Labs CP2102 USB to UART Bridge VCP (Virtual Com Port)
+#       RFXCom Tranciever USB stick
+#
+
+- hosts: openhab-server
+  vars:
+    - zwave_tty: ttyZWAVE
+    - rfxcom_tty: ttyRFXCOM
+
+  roles:
+    - os
+    - wlan
+    - java
+    - usb
+    - openhab

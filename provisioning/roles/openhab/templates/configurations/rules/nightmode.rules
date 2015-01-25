@@ -1,0 +1,30 @@
+rule "Take house into nightmode"
+when
+	Time cron "0 0 2 ? * *"
+then
+	
+	if(House_Nightmode.state == OFF) {
+		logInfo("org.openhab.rules", "Entering nightmode at " + now)
+		sendCommand(House_Nightmode, ON)
+		sendCommand(Heating, OFF)
+	} else {
+		logInfo("org.openhab.rules", "House allready in nightmode, doing nothing. " + now)
+	}
+end
+
+
+rule "Take house out of nightmode"
+when
+	Time cron "0 0 6 ? * *"
+then
+	
+	if(House_Nightmode.state == ON) {
+		logInfo("org.openhab.rules", "Exiting nightmode at " + now)
+		sendCommand(House_Nightmode, OFF)
+		if( Proximity.state == ON) {
+			sendCommand(Heating, ON)
+		}
+	} else {
+		logInfo("org.openhab.rules", "House allready out of nightmode, doing nothing. " + now)
+	}
+end

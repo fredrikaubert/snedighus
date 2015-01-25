@@ -1,0 +1,153 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
+var Timer timerFredMobileWlan = null
+var Timer timerSusMobileWlan = null
+
+var Timer timerLeavingHomeSequence = null
+
+
+rule "ComingHome"
+when
+	Item Proximity changed from OFF to ON
+then
+	logInfo("org.openhab.rules", "Now coming home")
+	sendNotification("{{fred_email}}", "Now coming home")
+	//setMasterVolume(1.0f)
+	//say("Proximity trigger test.")
+	sendCommand(Security_Mode, 0)
+	if( timerLeavingHomeSequence==null ) {		
+		sendCommand(Scene_LivingRoom, 4)
+	} else {
+		if(timerLeavingHomeSequence.running) {
+			timerLeavingHomeSequence.cancel()
+		}
+		timerLeavingHomeSequence = null
+	}
+	
+end
+
+rule "LeavingHome"
+when
+	Item Proximity changed from ON to OFF
+then
+	logInfo("org.openhab.rules","All proximity indicators are off. Starting leaving home sequence.")
+	sendXbmcNotification("192.168.0.31", 80, "Leaving home", "Will shut down house in 5 minutes")
+	sendXbmcNotification("192.168.0.32", 8080, "Leaving home", "Will shut down house in 5 minutes")
+	//pushNotification("Proximity","Shutting down appartment in 5 minutes")
+	
+	sendNotification("{{fred_email}}", "Shutting down appartment in 5 minutes")
+	if(Mobile_Sus_Wlan.changedSince(now.minusMinutes(15))) {
+		sendNotification("{{sus_email}}", "Shutting down appartment in 5 minutes")
+	}
+	if( timerLeavingHomeSequence==null ) {		
+		timerLeavingHomeSequence = createTimer(now.plusSeconds(300)) [|
+			logInfo("org.openhab.rules", "Timer has timed out.Completeting leaving home sequence.")
+			sendXbmcNotification("192.168.0.31", 80, "Leaving home", "The timeout have been reached, now shutting down")
+			sendXbmcNotification("192.168.0.32", 8080, "Leaving home", "The timeout have been reached, now shutting down")
+			pushNotification("Proximity","The timeout have been reached, now shutting down")
+			
+			
+			
+			
+			//Don't know why, but ide complains without try/catch
+			try {callScript("shutdown_house")} catch(org.openhab.core.scriptengine.ScriptExecutionException e) {}
+			
+			if(timerLeavingHomeSequence!=null) {
+				if(timerLeavingHomeSequence.running) {
+					timerLeavingHomeSequence.cancel()
+				}
+				timerLeavingHomeSequence = null
+			}
+			sendNotification("{{fred_email}}", "The timeout have been reached, now shutting down house.")	
+			if(Mobile_Sus_Wlan.changedSince(now.minusMinutes(20))) {
+				sendNotification("{{sus_email}}", "The timeout have been reached, now shutting down house.")
+			}
+			sendCommand(Security_Mode, 1)
+		]
+	} else {
+		timerLeavingHomeSequence.reschedule(now.plusSeconds(300))
+	}
+	
+end
+
+
+
+
+
+
+
+
+
+
+rule "Fred Mobile Wlan Proximity Timer Leave"
+when
+	Item Mobile_Fred_Wlan changed from ON to OFF
+then
+	logInfo("org.openhab.rules","fredwlan off. starting timer.")
+	if( timerFredMobileWlan==null ) {		
+		timerFredMobileWlan = createTimer(now.plusSeconds(300)) [|
+			logInfo("org.openhab.rules", "Timer has timed out. Executing fredwlan proximity off")
+			sendCommand(Mobile_Fred_Wlan_Timed, OFF)
+			if(timerFredMobileWlan!=null) {
+				if(timerFredMobileWlan.running) {
+					timerFredMobileWlan.cancel()
+				}
+				timerFredMobileWlan = null
+			}	
+		]
+	} else {
+		timerFredMobileWlan.reschedule(now.plusSeconds(300))
+	}
+end
+
+rule "Fred Mobile Wlan Proximity Enter"
+when
+	Item Mobile_Fred_Wlan changed from OFF to ON
+then
+	logInfo("org.openhab.rules","fredwlan on. setting to on.")
+	if(timerFredMobileWlan!=null) {	
+		timerFredMobileWlan.cancel
+		timerFredMobileWlan = null
+	}
+	sendCommand(Mobile_Fred_Wlan_Timed, ON)
+end
+
+
+
+//-----------------------------------
+rule "Sus Mobile Wlan Proximity Timer Leave"
+when
+	Item Mobile_Sus_Wlan changed from ON to OFF
+then
+	logInfo("org.openhab.rules", "suswlan off. starting timer.")
+	if( timerSusMobileWlan==null ) {		
+		timerSusMobileWlan = createTimer(now.plusSeconds(300)) [|
+			logInfo("org.openhab.rules", "Timer has timed out. Executing suswlan proximity off")
+			sendCommand(Mobile_Sus_Wlan_Timed, OFF)
+			if(timerSusMobileWlan!=null) {
+				if(timerSusMobileWlan.running) {
+					timerSusMobileWlan.cancel()
+				}
+				timerSusMobileWlan = null
+			}	
+		]
+	} else {
+		timerSusMobileWlan.reschedule(now.plusSeconds(300))
+	}
+end
+
+rule "Sus Mobile Wlan Proximity Enter"
+when
+	Item Mobile_Sus_Wlan changed from OFF to ON
+then
+	logInfo("org.openhab.rules","suswlan on. setting to on.")
+	if(timerSusMobileWlan!=null) {	
+		timerSusMobileWlan.cancel
+		timerSusMobileWlan = null
+	}
+	sendCommand(Mobile_Sus_Wlan_Timed, ON)
+end
+
+

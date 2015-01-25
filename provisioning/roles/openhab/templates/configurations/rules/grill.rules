@@ -1,0 +1,42 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
+var Boolean allreadyAlerted = false
+
+rule "Grill Meat Type Changes" 
+when 
+	Item grill_meat_type changed
+then
+	//mappings=[0=Storfe, 1=Lam, 2=Svin, 3=Kylling]
+	switch(grill_meat_type.state as DecimalType) {
+		case 0: postUpdate(grill_meat_target_temp, 59)
+		case 1: postUpdate(grill_meat_target_temp, 59)
+		case 2: postUpdate(grill_meat_target_temp, 65)
+		case 3: postUpdate(grill_meat_target_temp, 67)
+	}	
+	logInfo("org.openhab.rules", "Setting target temperature")	
+end
+
+rule "Grill Meat Type Changes" 
+when 
+	Item sensor_meat_temp received update
+then
+	var coreTemp = sensor_meat_temp.state as DecimalType
+	var targetTemp = grill_meat_target_temp.state as DecimalType
+	if( coreTemp >= targetTemp) {
+		if(allreadyAlerted == false) {
+			allreadyAlerted = true
+			sendCommand(Light_Livingroom_Montana_Hue, "1,50,80")
+			sendCommand(Light_Livingroom_Dining_Table_Hue, "1,50,80")
+			pushNotification("Grill","Kjøttet er ferdig stekt. Kjernetemperatur er " + sensor_meat_temp)
+		}
+	} else {
+		allreadyAlerted = false
+	}
+end
+
+
+
+
+    

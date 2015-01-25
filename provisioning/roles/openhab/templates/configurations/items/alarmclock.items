@@ -1,0 +1,12 @@
+Switch  alarmMonday     "Mandag"     <switch>  (alarmClockWeekday) 
+Switch  alarmTuesday   "Tirsdag"   <switch>  (alarmClockWeekday) 
+Switch  alarmWednesday   "Onsdag"   <switch>  (alarmClockWeekday) 
+Switch  alarmThursday "Torsdag" <switch>  (alarmClockWeekday) 
+Switch  alarmFriday    "Fredag"    <switch>  (alarmClockWeekday) 
+Switch  alarmSaturday    "Lørdag"    <switch>  (alarmClockWeekday) 
+Switch  alarmSunday    "Søndag"    <switch>  (alarmClockWeekday) 
+
+String alarmClockMessage "%s"
+
+Number alarmClockHours "Timer [%d]" <clock> (alarmTime)
+Number alarmClockMinutes "Minutter [%d]" <clock> (alarmTime)

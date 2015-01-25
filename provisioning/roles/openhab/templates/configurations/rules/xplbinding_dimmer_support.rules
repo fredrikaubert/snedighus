@@ -1,0 +1,27 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
+
+
+rule "When changed fred bedside dimmer"
+when 
+	Item bedroom_bedside_fred changed
+then
+	if(bedroom_bedside_fred.state == 0) {
+		sendCommand(bedroom_bedside_fred_support_switch, OFF)
+	} else {
+		if(bedroom_bedside_fred.state instanceof DecimalType) {
+			var switch_dimlevel = bedroom_bedside_fred.state as DecimalType 
+			var xpl_dimlevel = (switch_dimlevel / 6.25)
+			if( xpl_dimlevel.intValue == 16 ) {
+				xpl_dimlevel = 15.0bd
+			}
+			var command = "" + xpl_dimlevel.intValue
+			sendCommand(bedroom_bedside_fred_support_dimlevel, command) 
+
+		}
+	}
+	
+end 
+	

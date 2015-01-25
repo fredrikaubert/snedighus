@@ -1,0 +1,229 @@
+Group All
+Group Inside 	(All)
+Group Outdoor 	(All)
+Group Shutters 	(All)
+Group Weather 	(All)
+Group Status 	(All)
+//Group BatteryLevel (All)
+
+Group LivingRoom 	"Living Room" 	<video> 	(Inside)
+Group Bedroom 		"Bedroom" 		<bedroom> 	(Inside)
+Group Office 		"Office" 		<office> 	(Inside)
+Group GuestRoom 	"Guestroom" 	<bedroom> 	(Inside)
+Group Kitchen 		"Kitchen" 		<kitchen> 	(Inside)
+Group Hall	 		"Corridor" 		<corridor> 	(Inside)
+Group Toilet 		"Toilet" 		<bath> 		(Inside)
+Group Bath 			"Bathroom" 		<bath> 		(Inside)
+
+
+/* active groups */
+Group:Switch:OR(ON, OFF) 		Lights 				"All Lights [(%d)]" 						(All)
+Group:Switch:OR(ON, OFF) 		LivingRoomLights 	"Living Room Lights" 	<video> 			(LivingRoom)
+Group:Switch:OR(ON, OFF) 		bedroomLights		"Bedroom Lights"		<bedroom>			(Bedroom)
+Group:Switch:OR(ON, OFF) 		officeLights		"Office Lights"			<office>			(Office)
+Group:Switch:OR(ON, OFF) 		guestRoomLights		"Guestroom Lights"		<bedroom>			(GuestRoom)
+Group:Switch:OR(ON, OFF) 		kitchenLights		"Kitchen Lights"		<kitchen>			(Kitchen)
+Group:Switch:OR(ON, OFF) 		hallLights			"Corridor Lights" 		<corridor> 			(Hall)
+
+
+Group:Switch:OR(ON, OFF) 		Heating 			"No. of Active Heatings [(%d)]" 	<heating> 		(All)
+Group:Number:AVG 				InsideTemperature	"Avg. Room Temperature [%.1f °C]" 	<temperature>	(Status)
+Group:Contact:OR(OPEN, CLOSED) 	Windows 			"Open windows [(%d)]"				<contact>		(All)
+Group:Number:MIN				BatteryLevel		"Battery Level [(%d)]"								(All)
+Group:Switch:OR(ON, OFF) 		Security 			"Security"											(All)
+
+Group:Switch:OR(ON, OFF)		Proximity 			"Proximity indicators [(%d)]"						(All)
+
+Group:Number:SUM 				Power 				"Nå: [%.1f W]" 			<energy> (All)
+Group:Number:SUM 				Energy 				"Totalt: [%.1f KWh]" 	<energy> (All)
+
+Group 							Power_Chart (Power)
+Number 							Power_Chart_Period "Periode"
+
+
+
+Switch 							Mobile_Fred_Wlan 		"Fredriks iPhone 5S Wlan" 		(Proximity) //{nh="FredriksiPhone2"}
+Switch 							Mobile_Fred_Wlan_Timed   "Fredriks iPhone 5S Wlan Timed"	(Proximity)	
+
+Switch 							Mobile_Sus_Wlan 		"Sus iPhone 5S Wlan" 		(Proximity) //{nh="Susannas-3g"}
+Switch 							Mobile_Sus_Wlan_Timed   "Sus iPhone 5S Wlan Timed"	(Proximity)	
+
+
+
+
+String UnknownDevices    		"Unknown devices in range: [%s]" { bluetooth="?" }
+Number NoOfPairedDevices 		"Devices in range: [%d]"  { bluetooth="*" }
+
+
+
+/* BEDROOM */
+Switch bedroom_sus_1 "Bedrom Sus Bedside Switch Button1" (Bedroom) 		{rfxcom="<{{bedroom_sus_1}}:Command"}
+Switch bedroom_sus_2 "Bedroom Sus Bedside Switch Button2" (Bedroom) 	{rfxcom="<{{bedroom_sus_2}}:Command"}
+Switch bedroom_sus_3 "Bedroom Sus Bedside Switch Button3" (Bedroom) 	{rfxcom="<{{bedroom_sus_3}}:Command"}
+Switch bedroom_sus_4 "Bedroom Sus Bedside Switch Button4" (Bedroom) 	{rfxcom="<{{bedroom_sus_4}}:Command"}
+
+
+
+Switch bedroom_fred_1 "Bedroom Fred Bedside Switch Button1" (Bedroom) {xpl="*,command,ac.basic,{{bedroom_fred_1}},command=#COMMAND"}
+Switch bedroom_fred_2 "Bedroom Fred Bedside Switch Button2" (Bedroom) {xpl="*,command,ac.basic,{{bedroom_fred_2}},command=#COMMAND"}
+Switch bedroom_fred_3 "Bedroom Fred Bedside Switch Button3" (Bedroom) {xpl="*,command,ac.basic,{{bedroom_fred_3}},command=#COMMAND"}
+Switch bedroom_fred_4 "Bedroom Fred Bedside Switch Button4" (Bedroom) {xpl="*,command,ac.basic,{{bedroom_fred_4}},command=#COMMAND"} 
+
+Switch bedroom_entrance_lower_right "Bedroom door Switch Lower right" (Bedroom) {rfxcom="<9670.1:Command" }
+
+Switch td_device_11 			"Bedroom Celing Lamp" 			(Bedroom,Lights,bedroomLights) {rfxcom=">{{bedroom_celing_lamp}}:LIGHTING2.AC:Command" }
+Switch td_device_13 			"Bedroom Celing Spot" 			(Bedroom,Lights,bedroomLights) {rfxcom=">{{bedroom_spot}}:LIGHTING2.AC:Command" }
+Color bedroom_counter   		"Bedroom Counter Lamp"   		(Bedroom,Colorize, Lights,bedroomLights) {hue="2"}
+Dimmer bedroom_bedside_sus 		"Bedroom Bedside Lamp (Sus)" 	(Bedroom,Lights,bedroomLights) {rfxcom=">{{bedroom_sus_1}}:LIGHTING2.AC:DimmingLevel"}
+Dimmer bedroom_bedside_fred 	"Bedroom Bedside Lamp (Fred)" 	(Bedroom,Lights,bedroomLights) 
+String bedroom_bedside_fred_support_switch "Bedroom Bedside Lamp (Fred) Support only not visible in GUI" {xpl="*,command,ac.basic,{{bedroom_fred_1}},command=#COMMAND"}
+String bedroom_bedside_fred_support_dimlevel "Bedroom Bedside Lamp (Fred) Support only not visible in GUI" {xpl="*,command,ac.basic,{{bedroom_fred_1}},command=preset,level=#COMMAND"}
+Color bedroom_wall_upwards  	"Bedroom Wall Lamp upwards" 	(Bedroom,Lights,bedroomLights) {hue="4"}
+Color bedroom_wall_downwards  	"Bedroom Wall Lamp upwards" 	(Bedroom,Lights,bedroomLights) {hue="5"}
+
+
+/* HALLWAY */
+Dimmer Light_Hall_Celing_Dimmer 	"Gang taklampe [%d %%]" 	(Hall,Lights,hallLights) {zwave="10"}
+Dimmer hallShoeRackLight			"Gang bordlampe [%d %%]"	(Hall, Lights,hallLights) //TODO Fix
+Switch hallPhotoFrame				"Gang fotoramme"			(Hall) {rfxcom=">{{hall_photo_frame}}:LIGHTING2.AC:Command"}
+Switch hallDoorlock					"Gang lås ytterdør"			(Hall) {zwave="9"}
+Switch hall_pir "PIR Hallway West" (Hall,Security) {rfxcom="<{{hall_pir}}:Command" }
+Number hall_pir_battery 	"Pir Hallway [%.1f batt]"	<battery>	( Hall, BatteryLevel) {rfxcom="{{hall_pir}}:BatteryLevel"}
+
+
+/* KITCHEN */
+Dimmer Light_KitchenTable_Dimmer 	"Kjøkken spiseplass [%d %%]" 		(Kitchen,Lights,kitchenLights) {zwave="5"}
+Switch kitchenLightDice "Kitchen Dice" (Kitchen,Lights,kitchenLights) {rfxcom=">{{kitchen_dice}}:LIGHTING2.AC:Command" }
+Switch td_device_9 "Kitchen Celin" (Kitchen,Lights,kitchenLights) {rfxcom=">{{kitchen_celing}}:LIGHTING2.AC:Command" }
+Switch td_device_10 "Kitchen Bench" (Kitchen,Lights,kitchenLights) {rfxcom=">{{kitchen_bench}}:LIGHTING2.AC:Command" }
+
+Switch kitchenWallOven "Kjøkkenpanelovn" (Kitchen, Heating) 													{zwave="8"}
+Number kitchenWallOvenPower 	"Strøm Kjøkkenovn [%.1f W]" 		  	<energy> 	(LivingRoom, Power, Power_Chart) {zwave="8:command=sensor_multilevel"}
+Number kitchenWallOvenEnergy "Kjøkkenovn totalforbruk: [%.2f KWh]" 		<energy> 	(LivingRoom, Energy) 			{zwave="8:command=meter" }
+
+
+Switch td_device_24 "PIR Kitchen" (Kitchen,Security) {rfxcom="<{{kitchen_pir}}:Command" }
+Number td_device_24_battery 	"Pir Kitchen [%.1f batt]"	<battery>	( Kitchen, BatteryLevel) {rfxcom="<{{kitchen_pir}}:BatteryLevel"}
+
+
+/* LIVINGROOM */
+Switch Switch_Livingroom_Bottom_Left 	"Stue Bryter nedre venstre" (LivingRoom) {rfxcom="<{{livingroom_switch_bottom_left}}:Command" }
+
+Dimmer td_device_1 						"Stua Foscarani" (LivingRoomLights,Lights){ rfxcom=">{{livingroom_foscarini}}:LIGHTING2.AC:DimmingLevel" }
+Dimmer td_device_2 						"Stua Havana" (LivingRoomLights,Lights) {rfxcom=">{{livingroom_havana}}:LIGHTING2.AC:DimmingLevel" }
+Dimmer td_device_3 						"Stua Unnu" (LivingRoomLights,Lights) {rfxcom=">{{livingroom_unnu}}:LIGHTING2.AC:DimmingLevel" }
+Color Light_Livingroom_Dining_Table_Hue "Dining Table (Hue)" (Colorize,LivingRoomLights,Lights) { hue="1" }
+Color Light_Livingroom_Montana_Hue 		"Stue Montana (Hue)"    (Colorize, LivingRoomLights, Lights)  {hue="3"}
+Color Light_Livingroom_Lightstrip_Hue 		"Stue Lightstrip (Hue)"    (Colorize, LivingRoomLights, Lights)  {hue="6"}
+
+Switch livingRoomOven 		"Stueovn" 						(LivingRoom, Heating) {zwave="7"}
+Number livingRoomOvenPower 	"Strøm Stueovn [%.1f W]" 		  <energy> 	(LivingRoom, Power, Power_Chart) {zwave="7:command=sensor_multilevel"}
+Number livingRoomOvenEnergy "Stueovn totalforbruk: [%.2f KWh]" <energy> 	(LivingRoom, Energy) {zwave="7:command=meter" }
+
+
+
+//Livingroom xbmc
+Switch LivingRoom_Player_Allowed_To_Change_Lights
+String LivingRoom_Player_Format "Xmbc [%s]" (LivingRoom) {xbmc="<[#livingRoom|Player.State]"}
+String LivingRoom_Player_Duration "Xmbc [%s]" (LivingRoom) {xbmc="<[#livingRoom|Player.State]"}
+String LivingRoom_Player_Kind "Xmbc [%s]" (LivingRoom)   {xbmc="<[#livingRoom|Player.Type]"}
+String LivingRoom_Player_State "Xmbc [%s]" (LivingRoom) {xbmc="<[#livingRoom|Player.State]"}
+String LivingRoom_Player_Title "Xmbc [%s]" (LivingRoom) {xbmc="<[#livingRoom|Player.Title]"}
+String LivingRoom_Player_Album "Xmbc [%s]" (LivingRoom) {xbmc="<[#livingRoom|Player.Album]"}
+String LivingRoom_Player_Artist "Xmbc [%s]" (LivingRoom) {xbmc="<[#livingRoom|Player.Artist]"}
+
+//LivingRoom_Receiver
+Switch LivingRoom_Receiver_Power "Receiver Power" <power> (LivingRoom) { yamahareceiver = "uid=livingroom, zone=main, bindingType=power" }
+String LivingRoom_Receiver_Input "Receiver Input" <video> (LivingRoom) { yamahareceiver = "uid=livingroom, zone=main, bindingType=input" }
+Dimmer LivingRoom_Receiver_VolumePercent "Volume [%.1f]" <volume> (LivingRoom) { yamahareceiver = "uid=livingroom, zone=main, bindingType=volumePercent" }
+Switch LivingRoom_Receiver_Mute "Mute" <mute> (LivingRoom) { yamahareceiver = "uid=livingroom, zone=main, bindingType=mute" }
+String LivingRoom_Receiver_SurroundProgram "Surround Program" <volume> (LivingRoom) { yamahareceiver = "uid=livingroom, zone=main, bindingType=surroundProgram" }
+		
+
+
+//Bedroom xbmc:
+Switch BedRoom_Player_Allowed_To_Change_Lights
+String BedRoom_Player_Format "Xmbc [%s]" (Bedroom) {xbmc="<[#bedRoom|Player.State]"}
+String BedRoom_Player_Duration "Xmbc [%s]" (Bedroom) {xbmc="<[#bedRoom|Player.State]"}
+String BedRoom_Player_Kind "Xmbc [%s]" (Bedroom)   {xbmc="<[#bedRoom|Player.Type]"}
+String BedRoom_Player_State "Xmbc [%s]" (Bedroom) {xbmc="<[#bedRoom|Player.State]"}
+String BedRoom_Player_Title "Xmbc [%s]" (Bedroom) {xbmc="<[#bedRoom|Player.Title]"}
+String BedRoom_Player_Album "Xmbc [%s]" (Bedroom) {xbmc="<[#bedRoom|Player.Album]"}
+String BedRoom_Player_Artist "Xmbc [%s]" (Bedroom) {xbmc="<[#bedRoom|Player.Artist]"}
+
+//BedRoom_Receiver
+Switch BedRoom_Receiver_Power "Receiver Power" <power> (Bedroom) { yamahareceiver = "uid=bedroom, zone=main, bindingType=power" }
+String BedRoom_Receiver_Input "Receiver Input" <video> (Bedroom) { yamahareceiver = "uid=bedroom, zone=main, bindingType=input" }
+Dimmer BedRoom_Receiver_VolumePercent "Volume [%.1f]" <volume> (Bedroom) { yamahareceiver = "uid=bedroom, zone=main, bindingType=volumePercent" }
+Switch BedRoom_Receiver_Mute "Mute" <mute> (Bedroom) { yamahareceiver = "uid=bedroom, zone=main, bindingType=mute" }
+String BedRoom_Receiver_SurroundProgram "Surround Program" <volume> (Bedroom) { yamahareceiver = "uid=bedroom, zone=main, bindingType=surroundProgram" }
+
+
+
+//String LivingRoom_Player_Status "Xmbc [%s]" (LivingRoom) {xpl="parasit-xbmc.xbmcstua,status,media.mptrnspt,mp=xbmc,command=#CURRENT"}
+//String LivingRoom_Player_Kind "Xmbc [%s]" (LivingRoom) {xpl="parasit-xbmc.xbmcstua,status,media.mptrnspt,mp=xbmc,kind=#CURRENT"}
+
+Switch proximityGuestroomOccupied "Gjesterom overnatting" (Proximity, Guestroom)
+Dimmer Light_GuestRoom_Dimmer 		"Gjesterom taklampe [%d %%]" 		(GuestRoom,Lights,guestRoomLights) {zwave="4"} 
+Dimmer Light_GuestRoom_Closet 		"Gjesterom skapbelysning [%d %%]" 	(GuestRoom,Lights,guestRoomLights) {zwave="6"}
+
+Switch proximityOfficeOccupied	"Kontor overnatting"	(Proximity, Office)
+Dimmer Light_Office_Dimmer 			"Kontor taklampe [%d %%]" 			(Office,Lights, officeLights) {zwave="3"}
+
+Switch stairway_fusebox_magswitch "Sikrings. m-bryter" (Security) {rfxcom="<{{fusebox_magnet}}:Command"}
+Number stairway_fusebox_magswitch_battery "Sikrings. batt [%.1f batt]" <battery> (BatteryLevel) {rfxcom="<{{fusebox_magnet}}:BatteryLevel"}
+
+Number td_sensor_oregon_53_1 	"Balkong [%.1f °C]"	<temperature>	(Outdoor, Status) {rfxcom="<{{outdoor_temperature}}:Temperature"}
+Number td_sensor_oregon_53_2 	"Balkong [%.0f %%]"	<waterdrop>		(Outdoor, Status) {rfxcom="<{{outdoor_temperature}}:Humidity"}
+Number td_sensor_oregon_53_3 	"Balkong [%.1f batt]"	<battery>		(Outdoor, Status,BatteryLevel) {rfxcom="<{{outdoor_temperature}}:BatteryLevel"}
+DateTime OutdoorTemperature_LastUpdate "Balkong Last Update [%1$ta %1$tR]" <clock>
+
+
+Switch christmas_tree_lights "Juletrelys" (Outdoor, Lights) {xpl="*,command,ac.basic,{{christmastree_lights}},command=#COMMAND"}
+
+Number td_sensor_oregon_111_1 	"Soverom [%.1f °C]"	<temperature>	(InsideTemperature,Bedroom) {rfxcom="<{{bedroom_temperature}}:Temperature"}
+Number td_sensor_oregon_111_2 	"Soverom [%.0f %%]"	<waterdrop>	(Bedroom) {rfxcom="<{{bedroom_temperature}}:Humidity"} 
+Number td_sensor_oregon_111_3 	"Soverom [%.1f batt]"	<battery>	(Bedroom,BatteryLevel) {rfxcom="<{{bedroom_temperature}}:BatteryLevel"} 
+DateTime BedroomTemperature_LastUpdate "Last Update [%1$ta %1$tR]" <clock>
+
+
+Number td_sensor_oregon_217_1 	"Stue [%.1f °C]"	<temperature>	(InsideTemperature, LivingRoom) {rfxcom="<{{livingroom_temperature}}:Temperature"}
+Number td_sensor_oregon_217_2 	"Stue [%.0f %%]"	<waterdrop>	(LivingRoom) {rfxcom="<{{livingroom_temperature}}:Humidity"} 
+Number td_sensor_oregon_217_3 	"Stue [%.1f batt]"	<battery>	(LivingRoom,BatteryLevel) {rfxcom="<{{livingroom_temperature}}:BatteryLevel"}
+DateTime LivingroomTemperature_LastUpdate "Last Update [%1$ta %1$tR]" <clock>
+
+
+Number td_sensor_oregon_guestroom_temp 		"Gjesterom [%.1f °C]"	<temperature>	(InsideTemperature, GuestRoom) {rfxcom="<{{guestroom_temperature}}:Temperature"}
+Number td_sensor_oregon_guestroom_humidity 	"Gjesterom [%.0f %%]"	<waterdrop>	(GuestRoom) {rfxcom="<{{guestroom_temperature}}:Humidity"} 
+Number td_sensor_oregon_guestroom_battery 	"Gjesterom [%.1f batt]"	<battery>	( GuestRoom, BatteryLevel) {rfxcom="<{{guestroom_temperature}}:BatteryLevel"}
+DateTime GuestroomTemperature_LastUpdate "Last Update [%1$ta %1$tR]" <clock>
+
+
+Number sensor_office_temp "Kontor [%.1f °C]" <temperature> (InsideTemperature, Office)  {rfxcom="<{{office_temperature}}:Temperature"}
+Number sensor_office_battery "Kontor [%.1f batt]" (Office, BatteryLevel) {rfxcom="<{{office_temperature}}:BatteryLevel"}
+DateTime OfficeTemperature_LastUpdate "Last Update [%1$ta %1$tR]" <clock>
+
+
+Number sensor_meat_temp "Grill [%.1f °C]" <temperature> {rfxcom="<{{grill_temperature}}:Temperature"}
+Number sensor_meat_battery "Grill [%.1f batt]"  (BatteryLevel) {rfxcom="<{{grill_temperature}}:BatteryLevel"}
+Number grill_meat_type "Kjøttype"  
+Number grill_meat_target_temp "Grill mål [%.1f °C]"
+DateTime GrillTemperature_LastUpdate "Last Update [%1$ta %1$tR]" <clock>
+
+ 
+String smoke_detector "Røykvarsler"  {rfxcom="<{{smoke_detector}}:Status"}
+
+
+Number Scene_LivingRoom "Scene LivingRoom" <sofa>
+Number Scene_Kitchen "Scene Kitchen" <kitchen>
+Number Scene_Bedrom "Scene BedRoom" <bedroom>
+Number Scene_Guestroom "Scene GuestRoom" <bedroom>
+Number Scene_Hall "Scene Hall"
+Number Scene_Office "Scene Office"
+
+Switch House_Nightmode "Night mode"
+
+Number Security_Mode "Alarm" //0=Disarmed, 1=Fully armed, 2=Perimeter protection
+
+
+Switch one_button_remote 	"One button remote"  {xpl="*,command,x10.basic,device=B1,unit=1,command=#COMMAND"}

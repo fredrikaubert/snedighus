@@ -1,0 +1,114 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
+
+rule "EnterNightMode" 
+when
+	Item bedroom_sus_4 received update OFF or
+	Item bedroom_fred_4 received update OFF
+then
+	logInfo("org.openhab.rules", "Bedside nightmode initiated")
+	sendCommand(House_Nightmode, ON)	
+	callScript("shutdown_house")
+end
+
+
+rule "GotoToiletSus" 
+when
+	Item bedroom_sus_4 received update ON
+then
+	logInfo("org.openhab.rules", "Sus goto toilet")
+	sendCommand(bedroom_bedside_sus, 25)
+	sendCommand(Scene_Bedrom, 100)
+	sendCommand(hall_pir, ON) 
+end 
+
+rule "GotoToiletFred" 
+when
+	Item bedroom_fred_4 received update ON
+then
+	logInfo("org.openhab.rules", "Fred goto toilet")
+	sendCommand(bedroom_bedside_fred, 20)
+	sendCommand(Scene_Bedrom, 100)
+	sendCommand(hall_pir, ON) 
+end 
+
+rule "SusBedSideOn" 
+when 
+	Item bedroom_sus_1 received update ON
+then
+	logInfo("org.openhab.rules", "SusBedSideOn")
+	sendCommand(bedroom_bedside_sus, 100)
+	
+end
+
+rule "FredBedSideOn" 
+when 
+	Item bedroom_fred_1 received update ON
+then
+	logInfo("org.openhab.rules", "FredBedsideOn")
+	sendCommand(bedroom_bedside_fred, 100)
+end
+
+rule "Bedroom_LightsOn"
+when
+	Item bedroom_sus_2 received update ON or
+	Item bedroom_fred_2 received update ON or
+	Item bedroom_entrance_lower_right received update ON
+then 
+	logInfo("org.openhab.rules", "Bedroom Lights on")
+	sendCommand(Scene_Bedrom, 1)
+end
+
+rule "Bedroom_LightsOff"
+when
+	Item bedroom_sus_2 received update OFF or
+	Item bedroom_fred_2 received update OFF or
+	Item bedroom_entrance_lower_right received update OFF
+then 
+	logInfo("org.openhab.rules", "Bedroom Lights off")
+	sendCommand(Scene_Bedrom, 0)
+end
+
+rule "Bedroom_Mode_Cozy"
+when
+	Item bedroom_sus_3 received update ON or
+	Item bedroom_fred_3 received update ON
+then 
+	logInfo("org.openhab.rules", "Bedroom Lights cozy")
+	sendCommand(Scene_Bedrom, 4)
+end
+
+rule "Bedroom_Mode_Tv"
+when
+	Item bedroom_sus_3 received update OFF or
+	Item bedroom_fred_3 received update OFF
+then 
+	logInfo("org.openhab.rules", "Bedroom tv mode")
+	sendCommand(Scene_Bedrom, 2)
+end
+
+
+
+rule "Switch_LivningRoom3_On" 
+when 
+	Item Switch_Livingroom_Bottom_Left received update ON
+then
+	if(House_Nightmode.state == ON ) {
+			logInfo("org.openhab.rules", "Livingroom lights on nightmode")
+			sendCommand(Scene_LivingRoom, 100)
+	} else {
+		logInfo("org.openhab.rules", "Livingroom lights on normal")
+		sendCommand(Scene_LivingRoom, 4)
+	}
+	
+end
+
+rule "Switch_LivningRoom3_Off" 
+when 
+	Item Switch_Livingroom_Bottom_Left received update OFF
+then
+	logInfo("org.openhab.rules", "Livingroom lights off")
+	sendCommand(LivingRoomLights, OFF)
+end
