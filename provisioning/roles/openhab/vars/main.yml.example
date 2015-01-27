@@ -1,5 +1,9 @@
 # these must be replaced by real values in vars/main.yml and encryptet with ansible-vault
 
+myopenhab_uuid: "qwertyy1-2345-6789-abcd-efghijklmnop"
+myopenhab_secret: "qwertyy123456789abcd"
+
+
 mail_smtp_server: "smtp.myprovider.com"
 mail_username: "my_username"
 mail_password: "my_pwd"

@@ -55,48 +55,36 @@
     src={{ ansible_env.HOME }}/configurations
     dest={{ openhab_install_dir }}/runtime/{{openhab_version}}/configurations
 
-#- name: sync setup into config
-#  synchronize: src=../files/configurations dest={{ ansible_env.HOME }}
 
 
-## NOT WORKING. NEED TO FIND OUT HOW TO HANDLE TEMPLATES RECURSIVE:
+## Could not find a way to do recursive templates. Meaning all new files needs to be added to the list. 
+## TODO: Find a better way to find and template all files in directory
 - name: sync setup into config
-  template: dest=configurations/{{item}}
-  with_fileglob:
-        - ../templates/configurations/*.cfg
-        - ../templates/configurations/*.xml
-
-- name: sync items into config
-  template: dest=configurations/items/{{item}}
-  with_fileglob:
-        - ../templates/configurations/items/*
-
-- name: sync items into config
-  template: dest=configurations/persistence/{{item}}
-  with_fileglob:
-        - ../templates/configurations/persistence/*
-
-- name: sync items into config
-  template: dest=configurations/items/{{item}}
-  with_fileglob:
-        - ../templates/configurations/scripts/*
-
-- name: sync items into config
-  template: dest=configurations/items/{{item}}
-  with_fileglob:
-        - ../templates/configurations/sitemaps/*  
-
-- name: sync items into config
-  template: dest=configurations/items/{{item}}
-  with_fileglob:
-        - ../templates/configurations/transform/*
-
-- name: sync items into config
-  template: dest=configurations/items/{{item}}
-  with_fileglob:
-        - ../templates/configurations/logback.xml
-
-### END NOT WORKING      
+  template: dest={{ ansible_env.HOME }}/configurations/{{item}} src=configurations/{{item}}
+  with_items:
+        - openhab.cfg
+        - users.cfg
+        - logback.xml
+        - logback_debug.xml
+        - items/alarmclock.items
+        - items/demo.items
+        - items/systeminfo.items
+        - persistence/rrd4j.persist
+        - rules/alarmclock.rules
+        - rules/demo.rules
+        - rules/grill.rules
+        - rules/heating.rules
+        - rules/lastupdated.rules
+        - rules/nightmode.rules
+        - rules/proximity.rules
+        - rules/security.rules
+        - rules/switch.rules
+        - rules/xbmcbedroom.rules
+        - rules/xbmcstua.rules
+        - rules/xplbinding_dimmer_support.rules
+        - scripts/shutdown_house.script
+        - sitemaps/default.sitemap
+        - transform/motion.map   
 
 
 - name: sync secret setup into config
