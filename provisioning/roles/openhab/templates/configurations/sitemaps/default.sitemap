@@ -226,23 +226,31 @@ sitemap default label="Leiligheten" {
 			Frame {
 				Text item=uptime
 			}
+			Frame {
+				Text item=cpuCombined icon="system"
+			}
+			
 			Frame label="Load" {
 				Text item=loadAverage1min
 				Text item=loadAverage5min
 				Text item=loadAverage15min
 			}
 			Frame label="Minnebruk" {
-				Text item=memFreePercent  
+				Text item=memFreePercent  {
+					Frame {
+						Switch item=memFreePercentPeriod label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"]
+						Chart item=memFreePercent period=h refresh=30000 visibility=[memFreePercentPeriod==0, memFreePercentPeriod=="Uninitialized"]
+						Chart item=memFreePercent period=D refresh=30000 visibility=[memFreePercentPeriod==1]
+						Chart item=memFreePercent period=W refresh=30000 visibility=[memFreePercentPeriod==2]
+					}
+				}
 				Text item=memUsed 
 				Text item=memUsedPercent
 				Text item=memActualFree 
 				Text item=memActualUsed 
 				Text item=memTotal 
 				
-				Switch item=medFreePercentPeriod label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"] icon="energy"
-				Chart item=memFreePercent period=h refresh=300 visibility=[medFreePercentPeriod==0, medFreePercentPeriod=="Uninitialized"]
-				Chart item=memFreePercent period=D refresh=1800 visibility=[medFreePercentPeriod==1]
-				Chart item=memFreePercent period=W refresh=3600 visibility=[medFreePercentPeriod==2]
+	
 			}
 			
 			Frame label="Swap" {

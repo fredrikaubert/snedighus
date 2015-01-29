@@ -28,7 +28,9 @@
     - action.prowl
     - action.mail
     - persistence.rrd4j
-    
+
+- name: install sigar
+  include: install_sigar.yml
 
 - name: install HABmin
   include: install_habmin.yml 
