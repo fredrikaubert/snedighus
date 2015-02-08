@@ -71,12 +71,12 @@ then
 		}
 		
 		case 100: { //night-light
-			sendCommand(td_device_1, 4)
-			sendCommand(td_device_2, 4)
-			sendCommand(Light_Livingroom_Lightstrip_Hue, "55,40,10")
-			sendCommand(td_device_3, 6)
-			sendCommand(Light_Livingroom_Montana_Hue, "65,70,10")
-			sendCommand(Light_Livingroom_Dining_Table_Hue, "60,35,10")
+			sendCommand(td_device_1, 2)
+			sendCommand(td_device_2, 2)
+			sendCommand(Light_Livingroom_Lightstrip_Hue, "55,40,5")
+			sendCommand(td_device_3, 10)
+			sendCommand(Light_Livingroom_Montana_Hue, "65,70,5")
+			sendCommand(Light_Livingroom_Dining_Table_Hue, "60,70,5")
 		}
 		
 		
@@ -215,19 +215,23 @@ when
 then
 	switch(receivedCommand) {
 		case 0: { //Off
+			sendCommand(hallShoeRackLight, OFF)
 			sendCommand(Light_Hall_Celing_Dimmer, OFF)
 		}
 		
 		case 1: { //Normal
 			sendCommand(Light_Hall_Celing_Dimmer, 93)
+			sendCommand(hallShoeRackLight, 80)
 		}
 		
 		case 3:{ //Max
 			sendCommand(Light_Hall_Celing_Dimmer, 100)
+			sendCommand(hallShoeRackLight, 100)
 		}
 		
 		case 100: { //night-light
 			sendCommand(Light_Hall_Celing_Dimmer, 30)
+			sendCommand(hallShoeRackLight, 10)
 		}
 	}		
 end
@@ -249,7 +253,7 @@ then
 		case 1: { //Normal
 			sendCommand( td_device_9, ON )
 			sendCommand( td_device_10, ON )
-			sendCommand( kitchenLightDice, ON )
+			sendCommand( kitchenLightDice, 90 )
 			sendCommand( Light_KitchenTable_Dimmer, 75)
 			
 		}
@@ -257,7 +261,7 @@ then
 		case 2: { //Eat
 			sendCommand( td_device_9, OFF )
 			sendCommand( td_device_10, OFF )
-			sendCommand( kitchenLightDice, ON )
+			sendCommand( kitchenLightDice, 60 )
 			sendCommand( Light_KitchenTable_Dimmer, 80)
 		}
 		
@@ -265,25 +269,29 @@ then
 		case 3:{ //Night
 			sendCommand( td_device_9, OFF )
 			sendCommand( td_device_10, OFF )
-			sendCommand( kitchenLightDice, ON )
+			sendCommand( kitchenLightDice, 20 )
 			sendCommand( Light_KitchenTable_Dimmer, 40)
 		}
 		
 		case 4:{ //Cozy
 			sendCommand( td_device_9, ON )
 			sendCommand( td_device_10, OFF )
-			sendCommand( kitchenLightDice, ON )
+			sendCommand( kitchenLightDice, 40 )
 			sendCommand( Light_KitchenTable_Dimmer, 65)
 		}
 		case 5:{ //Max/Clean
 			sendCommand( td_device_9, ON )
 			sendCommand( td_device_10, ON )
-			sendCommand( kitchenLightDice, ON )
+			sendCommand( kitchenLightDice, 100 )
 			sendCommand( Light_KitchenTable_Dimmer, 100)
 		}
 		
 		case 100: { //night-light
-			sendCommand(Light_KitchenTable_Dimmer, 50)
+			sendCommand( kitchenLightDice, 40 )
+			sendCommand(Light_KitchenTable_Dimmer, 20)
+			sendCommand( td_device_9, OFF )
+			sendCommand( td_device_10, OFF )
+			
 		}
 	}		
 end
@@ -329,7 +337,8 @@ end
 
 rule "Autolight Kitchen"
 when
-	Item td_device_24  received update ON
+	Item td_device_24  received update ON //or
+	//Item kitchenFibaroPir received update ON
 then
 		if(timerPirKitchen==null) {
 			if(House_Nightmode.state == ON ) {
@@ -351,6 +360,8 @@ then
 			timerPirKitchen.reschedule(now.plusSeconds(600))
 		}
 end
+
+
 
 
 

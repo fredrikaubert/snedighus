@@ -47,3 +47,12 @@ then
 	postUpdate(GrillTemperature_LastUpdate, new DateTimeType())
 end
 
+
+rule "Records last kitchen temperature update time"
+when
+	Item kitchenFibaroTemperature received update
+then
+	postUpdate(kitchenFibaroTemperatureLastUpdated, new DateTimeType())
+end
+
+

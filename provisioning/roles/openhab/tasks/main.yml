@@ -28,6 +28,7 @@
     - action.prowl
     - action.mail
     - persistence.rrd4j
+    - io.transport.xpl
 
 - name: install sigar
   include: install_sigar.yml

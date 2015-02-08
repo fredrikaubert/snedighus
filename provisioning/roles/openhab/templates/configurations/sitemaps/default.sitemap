@@ -47,19 +47,23 @@ sitemap default label="Leiligheten" {
 
 	Frame {
 		
-		Text label="Kjøkken" icon="groundfloor" {
+		Text item=kitchenFibaroTemperature icon="kitchen" valuecolor=[kitchenFibaroTemperatureLastUpdated=="Uninitialized"="lightgray",kitchenFibaroTemperatureLastUpdated>900="lightgray",>28="red",>23="orange",>21="green",>18="orange",<=18="red"] {
 			Frame {
 				Switch item=Scene_Kitchen label="Scene" mappings=[0=Off, 1=Normal, 2=Eat, 5=Cleaning]
 			}
 			Frame {
 				Switch item=td_device_9
 				Switch item=td_device_10
-				Switch item=kitchenLightDice
+				Slider item=kitchenLightDice
 				Slider item=Light_KitchenTable_Dimmer
 			}
 			
 			Frame {
 				Switch item=kitchenWallOven
+			}
+			Frame {
+				Text item=kitchenFibaroTemperature valuecolor=[kitchenFibaroTemperatureLastUpdated=="Uninitialized"="lightgray",kitchenFibaroTemperatureLastUpdated>900="lightgray",>28="red",>23="orange",>21="green",>18="orange",<=18="red"]
+				Text item=kitchenFibaroLux
 			}
 		}
 	}
@@ -70,6 +74,7 @@ sitemap default label="Leiligheten" {
 			Frame {
 				Switch item=Scene_Hall label="Gang" mappings=[0=Off, 1=Normal, 2=Eat, 5=Cleaning]
 				Slider item=Light_Hall_Celing_Dimmer label="Gang tak"
+				Slider item=hallShoeRackLight label="Skoskap"
 				Switch item=hallDoorlock
 				Switch item=hallPhotoFrame
 			}
@@ -212,6 +217,7 @@ sitemap default label="Leiligheten" {
 			Frame {
 				Text item=livingRoomOvenPower
 				Text item=kitchenWallOvenPower
+				Text item=kitchenLightDicePower
 				
 			}
 			Frame {
@@ -222,7 +228,7 @@ sitemap default label="Leiligheten" {
 			}
 		}
 		
-		Text item=cpuCombined icon="system" {
+		Text item=loadAverage1min icon="system" {
 			Frame {
 				Text item=uptime
 			}
