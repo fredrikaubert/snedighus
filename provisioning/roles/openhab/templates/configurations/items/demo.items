@@ -95,7 +95,7 @@ Number hall_pir_battery 			"Pir Hallway [%.1f batt]"	<battery>	( Hall, BatteryLe
 /* KITCHEN */
 Dimmer Light_KitchenTable_Dimmer 	"Kjøkken spiseplass [%d %%]" 	(Kitchen,Lights,kitchenLights) {zwave="5"}
 Dimmer kitchenLightDice 			"Kitchen Dice" 					(Kitchen,Lights,kitchenLights) {zwave="14" }
-Number kitchenLightDicePower 	"Strøm Kjøkken Dice [%.1f W]" 		  <energy> 	(Kitchen, Power, Power_Chart) {zwave="14:command=sensor_multilevel"}
+Number kitchenLightDicePower 	"Strøm Kjøkken Dice [%.1f W]" 		  <energy> 	(Kitchen, Power, Power_Chart) {zwave="14:command=meter"}
 Switch td_device_9 					"Kitchen Celin" 				(Kitchen,Lights,kitchenLights) {rfxcom=">{{kitchen_celing}}:LIGHTING2.AC:Command" }
 Switch td_device_10 				"Kitchen Bench" 				(Kitchen,Lights,kitchenLights) {rfxcom=">{{kitchen_bench}}:LIGHTING2.AC:Command" }
 
