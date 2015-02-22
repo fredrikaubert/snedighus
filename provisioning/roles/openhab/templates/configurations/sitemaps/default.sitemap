@@ -1,6 +1,7 @@
 
 sitemap default label="Leiligheten" {
 
+
 	Frame {
 		Switch item=Scene_LivingRoom label="Stue" mappings=[0=Off, 1=Normal, 2=Tv, 4=Cozy]
 		Switch item=Scene_Kitchen label="Kjøkken" mappings=[0=Off, 1=Normal, 2=Eat, 5=Cleaning]
@@ -19,8 +20,17 @@ sitemap default label="Leiligheten" {
 			}
 			
 			Frame {
-				Text item=td_sensor_oregon_217_1 valuecolor=[LivingroomTemperature_LastUpdate=="Uninitialized"="lightgray",LivingroomTemperature_LastUpdate>900="lightgray",>28="red",>23="orange",>21="green",>18="orange",<=18="red"]
+				Text item=td_sensor_oregon_217_1 valuecolor=[LivingroomTemperature_LastUpdate=="Uninitialized"="lightgray",LivingroomTemperature_LastUpdate>900="lightgray",>28="red",>23="orange",>21="green",>18="orange",<=18="red"] {
+					Frame label="Temperatur stue" {
+						Text item=td_sensor_oregon_217_1 valuecolor=[BedroomTemperature_LastUpdate=="Uninitialized"="lightgray",BedroomTemperature_LastUpdate>900="lightgray",>25="red",>21="orange",>15="green",>10="orange",<=10="red"]
+						Switch item=livingroomTemperaturePeriod label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"]
+						Chart item=td_sensor_oregon_217_1 period=h refresh=300 visibility=[livingroomTemperaturePeriod==0, livingroomTemperaturePeriod=="Uninitialized"]
+						Chart item=td_sensor_oregon_217_1 period=D refresh=1800 visibility=[livingroomTemperaturePeriod==1]
+						Chart item=td_sensor_oregon_217_1 period=W refresh=3600 visibility=[livingroomTemperaturePeriod==2]		 
+					}
+				}			
 				Text item=td_sensor_oregon_217_2 valuecolor=[LivingroomTemperature_LastUpdate=="Uninitialized"="lightgray",LivingroomTemperature_LastUpdate>900="lightgray",>50="red",>40="orange",>20="green",>5="orange",<=5="red"]
+				Text item=LivingroomTemperature_LastUpdate visibility=[LivingroomTemperature_LastUpdate>900]
 			}
 			
 			Frame {
@@ -62,8 +72,17 @@ sitemap default label="Leiligheten" {
 				Switch item=kitchenWallOven
 			}
 			Frame {
-				Text item=kitchenFibaroTemperature valuecolor=[kitchenFibaroTemperatureLastUpdated=="Uninitialized"="lightgray",kitchenFibaroTemperatureLastUpdated>900="lightgray",>28="red",>23="orange",>21="green",>18="orange",<=18="red"]
+				Text item=kitchenFibaroTemperature valuecolor=[kitchenFibaroTemperatureLastUpdated=="Uninitialized"="lightgray",kitchenFibaroTemperatureLastUpdated>900="lightgray",>28="red",>23="orange",>21="green",>18="orange",<=18="red"] {
+					Frame label="Temperatur kjøkken" {
+						Text item=kitchenFibaroTemperature valuecolor=[kitchenFibaroTemperatureLastUpdated=="Uninitialized"="lightgray",kitchenFibaroTemperatureLastUpdated>900="lightgray",>28="red",>23="orange",>21="green",>18="orange",<=18="red"]
+						Switch item=kitchenTemperaturePeriod label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"]
+						Chart item=kitchenFibaroTemperature period=h refresh=300 visibility=[kitchenTemperaturePeriod==0, kitchenTemperaturePeriod=="Uninitialized"]
+						Chart item=kitchenFibaroTemperature period=D refresh=1800 visibility=[kitchenTemperaturePeriod==1]
+						Chart item=kitchenFibaroTemperature period=W refresh=3600 visibility=[kitchenTemperaturePeriod==2]		 
+					}
+				}			
 				Text item=kitchenFibaroLux
+				Text item=kitchenFibaroTemperatureLastUpdated visibility=[kitchenFibaroTemperatureLastUpdated>900]
 			}
 		}
 	}
@@ -77,6 +96,7 @@ sitemap default label="Leiligheten" {
 				Slider item=hallShoeRackLight label="Skoskap"
 				Switch item=hallDoorlock
 				Switch item=hallPhotoFrame
+				Text item=hallFrontDoor
 			}
 		}
 	}
@@ -89,8 +109,17 @@ sitemap default label="Leiligheten" {
 			}
 			
 			Frame {
-				Text item=td_sensor_oregon_111_1 valuecolor=[BedroomTemperature_LastUpdate=="Uninitialized"="lightgray",BedroomTemperature_LastUpdate>900="lightgray",>25="red",>21="orange",>15="green",>10="orange",<=10="red"]
+				Text item=td_sensor_oregon_111_1 valuecolor=[BedroomTemperature_LastUpdate=="Uninitialized"="lightgray",BedroomTemperature_LastUpdate>900="lightgray",>25="red",>21="orange",>15="green",>10="orange",<=10="red"] {
+					Frame label="Temperatur soverom" {
+						Text item=td_sensor_oregon_111_1 valuecolor=[BedroomTemperature_LastUpdate=="Uninitialized"="lightgray",BedroomTemperature_LastUpdate>900="lightgray",>25="red",>21="orange",>15="green",>10="orange",<=10="red"]
+						Switch item=bedroomTemperaturePeriod label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"]
+						Chart item=td_sensor_oregon_111_1 period=h refresh=300 visibility=[bedroomTemperaturePeriod==0, bedroomTemperaturePeriod=="Uninitialized"]
+						Chart item=td_sensor_oregon_111_1 period=D refresh=1800 visibility=[bedroomTemperaturePeriod==1]
+						Chart item=td_sensor_oregon_111_1 period=W refresh=3600 visibility=[bedroomTemperaturePeriod==2]		 
+					}
+				}
 				Text item=td_sensor_oregon_111_2 valuecolor=[BedroomTemperature_LastUpdate=="Uninitialized"="lightgray",BedroomTemperature_LastUpdate>900="lightgray",>50="red",>40="orange",>20="green",>5="orange",<=5="red"]
+				Text item=BedroomTemperature_LastUpdate visibility=[BedroomTemperature_LastUpdate>900]
 				Text item=td_sensor_oregon_111_3
 			}
 			
@@ -142,7 +171,16 @@ sitemap default label="Leiligheten" {
 			}
 			
 			Frame {
-				Text item=sensor_office_temp  valuecolor=[OfficeTemperature_LastUpdate=="Uninitialized"="lightgray",OfficeTemperature_LastUpdate>900="lightgray",>28="red",>23="orange",>20="green",>18="orange",<=18="red"]			
+				Text item=sensor_office_temp  valuecolor=[OfficeTemperature_LastUpdate=="Uninitialized"="lightgray",OfficeTemperature_LastUpdate>900="lightgray",>28="red",>23="orange",>20="green",>18="orange",<=18="red"] {
+					Frame label="Temperatur kontor" {
+						Text item=sensor_office_temp  valuecolor=[OfficeTemperature_LastUpdate=="Uninitialized"="lightgray",OfficeTemperature_LastUpdate>900="lightgray",>28="red",>23="orange",>20="green",>18="orange",<=18="red"]
+						Switch item=officeTemperaturePeriod label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"]
+						Chart item=sensor_office_temp period=h refresh=300 visibility=[officeTemperaturePeriod==0, officeTemperaturePeriod=="Uninitialized"]
+						Chart item=sensor_office_temp period=D refresh=1800 visibility=[officeTemperaturePeriod==1]
+						Chart item=sensor_office_temp period=W refresh=3600 visibility=[officeTemperaturePeriod==2]		 
+					}
+				}			
+				Text item=OfficeTemperature_LastUpdate visibility=[OfficeTemperature_LastUpdate>900]			
 			}
 			
 			Frame {
@@ -164,8 +202,17 @@ sitemap default label="Leiligheten" {
 			}
 
 			Frame {
-				Text item=td_sensor_oregon_guestroom_temp valuecolor=[GuestroomTemperature_LastUpdate=="Uninitialized"="lightgray",GuestroomTemperature_LastUpdate>900="lightgray",>28="red",>23="orange",>20="green",>18="orange",<=18="red"]
+				Text item=td_sensor_oregon_guestroom_temp valuecolor=[GuestroomTemperature_LastUpdate=="Uninitialized"="lightgray",GuestroomTemperature_LastUpdate>900="lightgray",>28="red",>23="orange",>20="green",>18="orange",<=18="red"] {
+					Frame label="Temperatur barnerom" {
+						Text item=td_sensor_oregon_guestroom_temp valuecolor=[GuestroomTemperature_LastUpdate=="Uninitialized"="lightgray",GuestroomTemperature_LastUpdate>900="lightgray",>28="red",>23="orange",>20="green",>18="orange",<=18="red"]
+						Switch item=guestroomTemperaturePeriod label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"]
+						Chart item=td_sensor_oregon_guestroom_temp period=h refresh=300 visibility=[guestroomTemperaturePeriod==0, guestroomTemperaturePeriod=="Uninitialized"]
+						Chart item=td_sensor_oregon_guestroom_temp period=D refresh=1800 visibility=[guestroomTemperaturePeriod==1]
+						Chart item=td_sensor_oregon_guestroom_temp period=W refresh=3600 visibility=[guestroomTemperaturePeriod==2]		 
+					}
+				}			
 				Text item=td_sensor_oregon_guestroom_humidity valuecolor=[GuestroomTemperature_LastUpdate=="Uninitialized"="lightgray",GuestroomTemperature_LastUpdate>900="lightgray",>50="red",>40="orange",>20="green",>5="orange",<=5="red"]
+				Text item=GuestroomTemperature_LastUpdate visibility=[GuestroomTemperature_LastUpdate>900]
 			}
 			
 			Frame {
@@ -184,8 +231,17 @@ sitemap default label="Leiligheten" {
 	Frame {
 		Text item=td_sensor_oregon_53_1 valuecolor=[OutdoorTemperature_LastUpdate=="Uninitialized"="lightgray",OutdoorTemperature_LastUpdate>900="lightgray",>0="red",<=0="blue"] {
 			Frame {
-				Text item=td_sensor_oregon_53_1 valuecolor=[OutdoorTemperature_LastUpdate=="Uninitialized"="lightgray",OutdoorTemperature_LastUpdate>900="lightgray",>0="red",<=0="blue"]
-				Text item=td_sensor_oregon_53_2 valuecolor=[OutdoorTemperature_LastUpdate=="Uninitialized"="lightgray",OutdoorTemperature_LastUpdate>900="lightgray",>50="red",>40="orange",>20="green",>5="orange",<=5="red"]
+				Text item=td_sensor_oregon_53_1 valuecolor=[OutdoorTemperature_LastUpdate=="Uninitialized"="lightgray",OutdoorTemperature_LastUpdate>900="lightgray",>0="red",<=0="blue"] {
+					Frame label="Temperatur ute" {
+						Text item=td_sensor_oregon_53_1 valuecolor=[OutdoorTemperature_LastUpdate=="Uninitialized"="lightgray",OutdoorTemperature_LastUpdate>900="lightgray",>0="red",<=0="blue"]
+						Switch item=outdoorTemperaturePeriod label="Periode" mappings=[0="Time", 1="Dag", 2="Uke"]
+						Chart item=td_sensor_oregon_53_1 period=h refresh=300 visibility=[outdoorTemperaturePeriod==0, outdoorTemperaturePeriod=="Uninitialized"]
+						Chart item=td_sensor_oregon_53_1 period=D refresh=1800 visibility=[outdoorTemperaturePeriod==1]
+						Chart item=td_sensor_oregon_53_1 period=W refresh=3600 visibility=[outdoorTemperaturePeriod==2]		 
+					}
+				}			
+				Text item=td_sensor_oregon_53_2 valuecolor=[OutdoorTemperature_LastUpdate=="Uninitialized"="lightgray",OutdoorTemperature_LastUpdate>900="lightgray",>50="red",>40="orange",>20="green",>5="orange",<=5="red"] 
+				Text item=OutdoorTemperature_LastUpdate visibility=[OutdoorTemperature_LastUpdate>900]
 			}
 			
 			Frame {
@@ -196,6 +252,7 @@ sitemap default label="Leiligheten" {
 				Selection item=grill_meat_type label="Kjøttype" mappings=[0=Storfe, 1=Lam, 2=Svin, 3=Kylling]
 				Setpoint item=grill_meat_target_temp step=0.5
 				Text item=sensor_meat_temp valuecolor=[GrillTemperature_LastUpdate=="Uninitialized"="lightgray",GrillTemperature_LastUpdate>900="lightgray",>25="orange",>15="green",>5="orange",<=5="blue"]
+				Chart item=sensor_meat_temp period=h refresh=300 visibility=[GrillTemperature_LastUpdate>1800]
 			}
 			
 		}	
@@ -208,10 +265,10 @@ sitemap default label="Leiligheten" {
 	Frame label="Status" {
 		
 		Group item=Proximity
-		
 		Group item=InsideTemperature
+		Group item=BatteryLevel 
 		
-		Group item=BatteryLevel label="Batteri" icon="energy"
+		
 		Group item=Energy
 		Text item=Power icon="energy" {
 			Frame {
@@ -238,7 +295,11 @@ sitemap default label="Leiligheten" {
 			
 			Frame label="Load" {
 				Text item=loadAverage1min
-				Text item=loadAverage5min
+				Text item=loadAverage5min {
+					Frame label="Load 5" {
+						Chart item=loadAverage5min period=D refresh=1800
+					}
+				}
 				Text item=loadAverage15min
 			}
 			Frame label="Minnebruk" {
@@ -275,6 +336,10 @@ sitemap default label="Leiligheten" {
 				
 			}
 		}
+	}
+	
+	Frame {
+		Text item=hallFrontDoor visibility=[hallFrontDoor==OPEN]
 	}
 
 	

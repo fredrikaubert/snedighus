@@ -302,9 +302,10 @@ end
 /** shows how to use sensor values from the past */
 rule "Autolight Hallway"
 when
-	Item hall_pir received update ON
+	Item hall_pir received update ON or 
+	Item hallFrontDoor received update OPEN
 then
-	logInfo("org.openhab.rules","hall_pir detected")
+	logInfo("org.openhab.rules","hall_pir or front door open detected")
 	if(timerPirHall==null) {
 		if(House_Nightmode.state == ON ) {
 			sendCommand(Scene_Hall, 100)

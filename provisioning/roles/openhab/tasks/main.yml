@@ -88,6 +88,7 @@
         - scripts/shutdown_house.script
         - sitemaps/default.sitemap
         - transform/motion.map   
+        - transform/door.map   
 
 
 - name: sync secret setup into config

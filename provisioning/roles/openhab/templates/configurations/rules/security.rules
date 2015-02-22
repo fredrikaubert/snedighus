@@ -12,7 +12,7 @@ when
 then
 	if(Security_Mode == 1) {
 		if(timerSecurityDisarm == null) {
-			createTimer(now.plusSeconds(600)) [|
+			createTimer(now.plusSeconds(300)) [|
 				if(Security_Mode.state == 1) {
 					sendNotification("{{fred_email}}", "Alarm utløst")
 					sendMail("{{fred_email}}", "[Openhab] Security Alert", "Alarmen ble utløst.")
