@@ -16,12 +16,20 @@ then
 				if(Security_Mode.state == 1) {
 					sendNotification("{{fred_email}}", "Alarm utløst")
 					sendMail("{{fred_email}}", "[Openhab] Security Alert", "Alarmen ble utløst.")
+					sendNotification("{{sus_email}}", "Alarm utløst")
 				}
 			]
 		}
 	}
 end
 
+
+rule "SecurityArm"
+when
+	Item Security_Mode changed to 1
+then
+	logInfo("org.openhab.rules", "Alarm armed")
+end
 
 rule "SecurityDisarm"
 when
@@ -30,9 +38,7 @@ then
 	if(timerSecurityDisarm !=null) {		
 		timerSecurityDisarm.cancel
 		timerSecurityDisarm = null
-		say("Alarm disarmed. ")
-		sendMail("{{fred_email}}", "[Openhab] Security Disarmed Event", "Alarmen ble skrudd av.")
-		
+		logInfo("org.openhab.rules", "Alarm disarmed")
 	}
 end
 

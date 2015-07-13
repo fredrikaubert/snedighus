@@ -24,7 +24,7 @@ then
 			sendCommand(Light_Livingroom_Montana_Hue, "62,50,80")
 			sendCommand(Light_Livingroom_Dining_Table_Hue, "62,50,80")
 			
-			sendCommand(hallPhotoFrame, ON)
+			//sendCommand(hallPhotoFrame, ON)
 			
 		}
 		
@@ -39,14 +39,14 @@ then
 			sendCommand(Light_Livingroom_Montana_Hue, "68,80,20")
 			
 			sendCommand(Light_Hall_Celing_Dimmer, OFF)
-			sendCommand(hallPhotoFrame, OFF)
+			//sendCommand(hallPhotoFrame, OFF)
 			
 		}
 		
 		
 		case 3:{ //Night
 			sendCommand(Lights, OFF)
-			sendCommand(hallPhotoFrame, OFF)
+			//sendCommand(hallPhotoFrame, OFF)
 		}
 		
 		case 4:{ //Cozy
@@ -57,7 +57,7 @@ then
 			sendCommand(Light_Livingroom_Montana_Hue, "65,70,50")
 			sendCommand(Light_Livingroom_Dining_Table_Hue, "65,70,30")
 			
-			sendCommand(hallPhotoFrame, ON)
+			//sendCommand(hallPhotoFrame, ON)
 		}
 		case 5:{ //Max/Clean
 			sendCommand(td_device_1, 100)
@@ -67,14 +67,14 @@ then
 			sendCommand(Light_Livingroom_Montana_Hue, "60,35,100")
 			sendCommand(Light_Livingroom_Dining_Table_Hue, "60,35,100")
 			
-			sendCommand(hallPhotoFrame, ON)
+			//sendCommand(hallPhotoFrame, ON)
 		}
 		
 		case 100: { //night-light
 			sendCommand(td_device_1, 2)
 			sendCommand(td_device_2, 2)
 			sendCommand(Light_Livingroom_Lightstrip_Hue, "55,40,5")
-			sendCommand(td_device_3, 10)
+			sendCommand(td_device_3, 20)
 			sendCommand(Light_Livingroom_Montana_Hue, "65,70,5")
 			sendCommand(Light_Livingroom_Dining_Table_Hue, "60,70,5")
 		}
@@ -122,6 +122,14 @@ then
 			sendCommand(td_device_13, OFF)
 			sendCommand(bedroom_counter, "65,70,50")
 	
+		}
+		
+		case 5: { //Night with babies
+			sendCommand(td_device_11, OFF) 
+			sendCommand(bedroom_wall_upwards, "68,80,10") 
+			sendCommand(bedroom_wall_downwards, OFF) 
+			sendCommand(td_device_13, OFF)
+			sendCommand(bedroom_counter, OFF)
 		}
 		
 		case 100:{ //Night
@@ -287,10 +295,10 @@ then
 		}
 		
 		case 100: { //night-light
-			sendCommand( kitchenLightDice, 40 )
-			sendCommand(Light_KitchenTable_Dimmer, 20)
+			sendCommand( kitchenLightDice, 30 )
+			sendCommand(Light_KitchenTable_Dimmer, 25)
 			sendCommand( td_device_9, OFF )
-			sendCommand( td_device_10, OFF )
+			sendCommand( td_device_10, ON )
 			
 		}
 	}		

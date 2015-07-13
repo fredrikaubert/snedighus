@@ -1,0 +1,22 @@
+
+rule "Photo frame on"
+when
+	Item Proximity changed from OFF to ON or
+	Item House_Nightmode changed from ON to OFF
+then
+	if(Proximity.state == ON) {
+		logInfo("org.openhab.rules", "Turning photo fram on")
+		sendCommand(hallPhotoFrame, ON)
+	}
+end
+
+
+rule "Photo frame on"
+when
+	Item Proximity changed from ON to OFF or
+	Item House_Nightmode changed from OFF to ON
+then
+	logInfo("org.openhab.rules", "Turning photo fram off")
+	sendCommand(hallPhotoFrame, OFF)
+end
+

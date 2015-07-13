@@ -1,5 +1,9 @@
 
-sendCommand(Scene_Bedrom, 0) 
+if( Proximity.state == ON ) {
+	sendCommand(Scene_Bedrom, 5)
+} else {
+	sendCommand(Scene_Bedrom, 0)
+} 
 sendCommand(Scene_Hall, 0) 
 sendCommand(Scene_LivingRoom, 0) 
 sendCommand(Scene_Kitchen, 0)
@@ -9,7 +13,7 @@ if( proximityGuestroomOccupied.state == OFF ) {
 if( proximityOfficeOccupied.state == OFF ) {
 	sendCommand( Scene_Office, 0 )
 }
-sendCommand( hallPhotoFrame, OFF )
+
 sendCommand( Heating, OFF)
 
 return null

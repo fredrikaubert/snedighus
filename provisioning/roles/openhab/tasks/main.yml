@@ -85,6 +85,7 @@
         - rules/xbmcbedroom.rules
         - rules/xbmcstua.rules
         - rules/xplbinding_dimmer_support.rules
+        - rules/photoframe.rules
         - scripts/shutdown_house.script
         - sitemaps/default.sitemap
         - transform/motion.map   

@@ -1,10 +1,12 @@
+import org.openhab.core.library.types.DecimalType
+
 rule "Heating off"
 when
 	Item Proximity changed from ON to OFF or
 	Item House_Nightmode changed from OFF to ON
 then
 	logInfo("org.openhab.rules","Switching off all heating (nightmode or leaving house)")
-	sendCommand(Heating, OFF)
+	sendCommand(autoTemperature, OFF)
 end
 
 
@@ -15,9 +17,55 @@ when
 then
 	if(Proximity.state == ON && House_Nightmode.state == OFF) {
 		logInfo("org.openhab.rules","Switching on all heating")
-		sendCommand(Heating, ON)
+		sendCommand(autoTemperature, ON)
 	} else {
 		logInfo("org.openhab.rules","Heating on rule: Not doing anything. Conditions not met. Proximity state:" + Proximity.state + "House nightmode:" + House_Nightmode.state )
 	}
 	
+end
+
+rule "Autoheating Livingroom"
+when 
+	Item td_sensor_oregon_217_1 changed or
+	Item livingRoomTargetTemperature changed or
+	Item autoTemperature changed
+then
+	if(autoTemperature.state == ON) {
+		val actualTemp = (td_sensor_oregon_217_1.state as DecimalType).doubleValue
+		val targetTemp = (livingRoomTargetTemperature.state as DecimalType).doubleValue
+		if( (actualTemp + 0.5) < targetTemp) {
+			sendCommand(livingRoomOven, ON)
+		}
+		if((actualTemp - 0.5) > targetTemp ) {
+			sendCommand(livingRoomOven, OFF)
+		}
+	} else {
+		if(livingRoomOven.state == ON) {
+			sendCommand(livingRoomOven, OFF)
+		}
+	}
+end
+
+
+rule "Autoheating Kitchen"
+when 
+	Item kitchenFibaroTemperature changed or
+	Item kitchenTargetTemperature changed or
+	Item autoTemperature changed
+then
+	if(autoTemperature.state == ON) {
+		sendCommand(kitchenWallOven, ON)
+//		val actualTemp = (kitchenFibaroTemperature.state as DecimalType).doubleValue
+//		val targetTemp = (kitchenTargetTemperature.state as DecimalType).doubleValue
+//		if( (actualTemp + 0.5) < targetTemp) {
+//			sendCommand(kitchenWallOven, ON)
+//		}
+//		if((actualTemp - 0.5) > targetTemp ) {
+//			sendCommand(kitchenWallOven, OFF)
+//		}
+	} else {
+		if(kitchenWallOven.state == ON) {
+			sendCommand(kitchenWallOven, OFF)
+		}
+	}
 end

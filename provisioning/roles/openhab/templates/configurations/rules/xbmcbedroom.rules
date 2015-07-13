@@ -8,8 +8,10 @@ var Timer timerXbmcBedRoom = null
 rule "Player Play"
 when
 	Item BedRoom_Player_State changed from Pause to Play or 
-	Item BedRoom_Player_State changed from Stop to Play 
+	Item BedRoom_Player_State changed from Stop to Play or
+	Item BedRoom_Player_Allowed_To_Change_Lights changed from OFF to ON
 then
+	if(BedRoom_Player_Allowed_To_Change_Lights.state == ON && LivingRoom_Player_State.state == "Play") {
 		if( timerXbmcBedRoom!=null ) {	
 			timerXbmcBedRoom.cancel
 		}	
@@ -17,7 +19,7 @@ then
 			logInfo("org.openhab.rules", "Timer xbmcBedRoom expired. Executing command")
 			
 			if(BedRoom_Player_Kind.state != "song") {
-				sendCommand(Scene_Bedrom, 0)
+				sendCommand(Scene_Bedrom, 5)
 			}
 			
 			if(timerXbmcBedRoom!=null) {
@@ -27,6 +29,8 @@ then
 				timerXbmcBedRoom = null
 			}	
 		]	
+		
+	}
 end
 
 
@@ -36,7 +40,7 @@ when
 	Item BedRoom_Player_State changed from Stop to Pause or
 	Item BedRoom_Player_State changed from Play to Pause
 then
-	
+	if(BedRoom_Player_Allowed_To_Change_Lights.state == ON ) {
 		if( timerXbmcBedRoom!=null ) {	
 			timerXbmcBedRoom.cancel
 		}	
@@ -53,6 +57,8 @@ then
 			}	
 		]
 		
+		
+	}
 end
 
 
@@ -65,21 +71,23 @@ when
 	Item BedRoom_Player_State changed from End to Stop
 	
 then
-	if(Scene_Bedrom.state != 1) {
-		if( timerXbmcBedRoom!=null ) {	
-			timerXbmcBedRoom.cancel
-		}	
-		timerXbmcBedRoom = createTimer(now.plusSeconds(1)) [|
-			logInfo("org.openhab.rules", "Timer xbmcBedRoom expired. Executing command")
-			sendCommand(Scene_Bedrom, 1)
-			if(timerXbmcBedRoom!=null) {
-				if(timerXbmcBedRoom.running) {
-					timerXbmcBedRoom.cancel()
-				}
-				timerXbmcBedRoom = null
+	if(BedRoom_Player_Allowed_To_Change_Lights.state == ON ) {
+		if(Scene_Bedrom.state != 1) {
+			if( timerXbmcBedRoom!=null ) {	
+				timerXbmcBedRoom.cancel
 			}	
-		]
-		
+			timerXbmcBedRoom = createTimer(now.plusSeconds(1)) [|
+				logInfo("org.openhab.rules", "Timer xbmcBedRoom expired. Executing command")
+				sendCommand(Scene_Bedrom, 1)
+				if(timerXbmcBedRoom!=null) {
+					if(timerXbmcBedRoom.running) {
+						timerXbmcBedRoom.cancel()
+					}
+					timerXbmcBedRoom = null
+				}	
+			]
+			
+		}
 	}
 end
 

@@ -1,6 +1,6 @@
 rule "Take house into nightmode"
 when
-	Time cron "0 0 2 ? * *"
+	Time cron "0 0 1 ? * *"
 then
 	
 	if(House_Nightmode.state == OFF) {
@@ -15,7 +15,7 @@ end
 
 rule "Take house out of nightmode"
 when
-	Time cron "0 0 6 ? * *"
+	Time cron "0 0 8 ? * *"
 then
 	
 	if(House_Nightmode.state == ON) {

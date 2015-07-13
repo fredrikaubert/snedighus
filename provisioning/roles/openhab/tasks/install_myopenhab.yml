@@ -14,7 +14,7 @@
 
 - name: download my openhab
   get_url: >
-    url=https://my.openhab.org/downloads/org.openhab.io.myopenhab-{{my_openhab_version}}.jar
+    url=https://bintray.com/artifact/download/openhab/mvn/org/openhab/io/org.openhab.io.myopenhab/{{my_openhab_version}}/org.openhab.io.myopenhab-{{my_openhab_version}}.jar
     dest={{ openhab_install_dir }}/myopenhab.org/org.openhab.io.myopenhab-{{my_openhab_version}}.jar
   when:  myopenhab_ls.rc != 0
 

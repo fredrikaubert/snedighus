@@ -6,7 +6,7 @@ sitemap default label="Leiligheten" {
 		Switch item=Scene_LivingRoom label="Stue" mappings=[0=Off, 1=Normal, 2=Tv, 4=Cozy]
 		Switch item=Scene_Kitchen label="Kjøkken" mappings=[0=Off, 1=Normal, 2=Eat, 5=Cleaning]
 		Switch item=Scene_Hall label="Gang" mappings=[0=Off, 1=Normal, 2=Eat, 5=Cleaning]
-		Switch item=Scene_Bedrom label="Soverom" mappings=[0=Off, 1=Normal, 2=Tv, 4=Cozy]
+		Switch item=Scene_Bedrom label="Soverom" mappings=[0=Off, 1=Normal, 2=Tv, 4=Cozy, 5=BNight]
 		Switch item=Scene_Office label="Kontor" mappings=[0=Off, 1=Normal, 4=Cozy, 5=Max]
 		Switch item=Scene_Guestroom label="Barnerom" mappings=[0=Off, 1=Normal, 4=Cozy, 100=Natt]
 	}	
@@ -34,6 +34,7 @@ sitemap default label="Leiligheten" {
 			}
 			
 			Frame {
+				Setpoint item=livingRoomTargetTemperature step=0.5
 				Switch item=livingRoomOven
 			}
 			
@@ -69,6 +70,7 @@ sitemap default label="Leiligheten" {
 			}
 			
 			Frame {
+				Setpoint item=kitchenTargetTemperature step=0.5
 				Switch item=kitchenWallOven
 			}
 			Frame {
@@ -104,8 +106,8 @@ sitemap default label="Leiligheten" {
 
 	Frame {
 		Text item=td_sensor_oregon_111_1 icon="bedroom" valuecolor=[BedroomTemperature_LastUpdate=="Uninitialized"="lightgray",BedroomTemperature_LastUpdate>900="lightgray",>25="red",>21="orange",>15="green",>10="orange",<=10="red"] {
-			Frame {
-				Switch item=Scene_Bedrom label="Scene" mappings=[0=Off, 1=Normal, 2=Tv, 4=Cozy]
+			Frame { 
+				Switch item=Scene_Bedrom label="Scene" mappings=[0=Off, 1=Normal, 2=Tv, 4=Cozy, 5=BNight]
 			}
 			
 			Frame {
@@ -260,6 +262,7 @@ sitemap default label="Leiligheten" {
 		
 	Frame {
 		Switch item=House_Nightmode label="Nattmodus"
+		Switch item=autoTemperature label="Autovarme"
 	}
 	
 	Frame label="Status" {

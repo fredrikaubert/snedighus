@@ -49,7 +49,7 @@ Switch 							Mobile_Sus_Wlan 		"Sus iPhone 5S Wlan" 		(Proximity) //{nh="Susann
 Switch 							Mobile_Sus_Wlan_Timed   "Sus iPhone 5S Wlan Timed"	(Proximity)	
 
 
-
+Switch 							autoTemperature 		"Juster varme automatisk"	<temperature>
 
 String UnknownDevices    		"Unknown devices in range: [%s]" { bluetooth="?" }
 Number NoOfPairedDevices 		"Devices in range: [%d]"  { bluetooth="*" }
@@ -102,6 +102,7 @@ Switch td_device_9 					"Kitchen Celin" 				(Kitchen,Lights,kitchenLights) {rfxc
 Switch td_device_10 				"Kitchen Bench" 				(Kitchen,Lights,kitchenLights) {rfxcom=">{{kitchen_bench}}:LIGHTING2.AC:Command" }
 
 Switch kitchenSwitchLowerLeft 			"Kjøkkenbryter nedre venstre" 					(Kitchen) {rfxcom="<{{kitchen_dice}}:Command" }
+Number kitchenTargetTemperature		"Kjøkken ønsket temp [%.1f °C]" <heating>
 
 
 Switch kitchenWallOven "Kjøkkenpanelovn" (Kitchen, Heating) {zwave="8"}
@@ -112,11 +113,11 @@ Number kitchenWallOvenEnergy "Kjøkkenovn totalforbruk: [%.2f KWh]" 		<energy> 	
 Switch td_device_24 			"PIR Kitchen" (Kitchen,Security) 	{rfxcom="<{{kitchen_pir}}:Command" }
 //Number td_device_24_battery 	"Pir Kitchen [%.1f batt]"	<battery>	( Kitchen, BatteryLevel) {rfxcom="<{{kitchen_pir}}:BatteryLevel"}
 
-Number kitchenFibaroBattery 	"Kjøkken Fibaro Battery [%.0f %%]" <battery> (Kitchen, BatteryLevel)      		{ zwave="11:command=BATTERY" }
-Number kitchenFibaroTemperature "Kjøkken [%.1f °C]"          (Kitchen, InsideTemperature)  	{ zwave="11:command=SENSOR_MULTILEVEL,SENSOR_TYPE=1" }
+Number kitchenFibaroBattery 	"Kjøkken Fibaro Battery [%.0f %%]" <battery> (Kitchen, BatteryLevel)      		{ zwave="1:command=BATTERY" }
+Number kitchenFibaroTemperature "Kjøkken [%.1f °C]"          (Kitchen, InsideTemperature)  	{ zwave="1:command=SENSOR_MULTILEVEL,SENSOR_TYPE=1" }
 DateTime kitchenFibaroTemperatureLastUpdated "Kjøkkentemp Last Update [%1$ta %1$tR]" <clock>
-Number kitchenFibaroLux         "Kjøkken Lux [%.0f Lux]"        (Kitchen)                 		{ zwave="11:command=SENSOR_MULTILEVEL,SENSOR_TYPE=3" }
-Contact kitchenFibaroPir        "Fibaro PIR"                   (Kitchen,Security)               { zwave="11:command=SENSOR_BINARY" }
+Number kitchenFibaroLux         "Kjøkken Lux [%.0f Lux]"        (Kitchen)                 		{ zwave="1:command=SENSOR_MULTILEVEL,SENSOR_TYPE=3" }
+Contact kitchenFibaroPir        "Fibaro PIR"                   (Kitchen,Security)               { zwave="1:command=SENSOR_BINARY" }
 Number kitchenTemperaturePeriod
 
 
@@ -129,6 +130,8 @@ Dimmer td_device_1 						"Stua Foscarani" (LivingRoomLights,Lights){ rfxcom=">{{
 Dimmer td_device_2 						"Stua Havana" (LivingRoomLights,Lights) {zwave="12"}
 Dimmer td_device_3 						"Stua Unnu" (LivingRoomLights,Lights) {rfxcom=">{{livingroom_unnu}}:LIGHTING2.AC:DimmingLevel" }
 Number livingroomTemperaturePeriod
+Number livingRoomTargetTemperature		"Stue ønsket temp [%.1f °C]" <heating>
+
 
 Color Light_Livingroom_Dining_Table_Hue "Dining Table (Hue)" (Colorize,LivingRoomLights,Lights) { hue="1" }
 Color Light_Livingroom_Montana_Hue 		"Stue Montana (Hue)"    (Colorize, LivingRoomLights, Lights)  {hue="3"}
