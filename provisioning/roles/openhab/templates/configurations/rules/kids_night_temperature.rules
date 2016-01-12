@@ -1,0 +1,18 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
+rule "Open window on kids room reminder"
+when 
+	Time cron "0 0 18 ? * *"
+then
+	if((td_sensor_oregon_guestroom_temp.state as DecimalType).doubleValue > 18.0 && ( (td_sensor_oregon_guestroom_temp.state as DecimalType).doubleValue - (td_sensor_oregon_53_1.state as DecimalType).doubleValue > 2.0 )) {
+		(td_sensor_oregon_guestroom_temp.state as DecimalType).intValue
+		sendNotification("{{sus_email}}", "Temperatur på barnerommet er " + (td_sensor_oregon_guestroom_temp.state as DecimalType).intValue + " grader. Sjekk at vinduet på barnerommet er åpent.")
+		sendNotification("{{fred_email}}", "Temperatur på barnerommet er " + (td_sensor_oregon_guestroom_temp.state as DecimalType).intValue + " grader. Sjekk at vinduet på barnerommet er åpent.")
+		sendXbmcNotification("192.168.0.31", 80, "Vindu på barnerommet", "Temperatur på barnerommet er " + (td_sensor_oregon_guestroom_temp.state as DecimalType).intValue + " grader. Sjekk at vinduet på barnerommet er åpent.")
+		sendXbmcNotification("192.168.0.32", 8080, "Vindu på barnerommet", "Temperatur på barnerommet er " + (td_sensor_oregon_guestroom_temp.state as DecimalType).intValue + " grader. Sjekk at vinduet på barnerommet er åpent.")
+	}
+end
+
+

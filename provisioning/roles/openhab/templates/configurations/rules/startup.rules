@@ -1,0 +1,39 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
+rule "Startup"
+when 
+	System started
+then
+	logInfo("org.openhab.rules","System started. Sending notification to {{fred_email}}")
+	sendNotification("{{fred_email}}", "Openhab has been started")
+	createTimer(now.plusSeconds(300)) [|
+				logInfo("org.openhab.rules","Doing some post boot cleanup:" + livingRoomTargetTemperature.state)
+				//FIRST BOOT OF NEW VERSION NEEDS SOM INITIALIZIATION:
+				if(livingRoomTargetTemperature.state == Uninitialized) {
+					sendCommand(livingRoomTargetTemperature, 22.0)
+					logInfo("org.openhab.rules","Trying to set livingRoomTargetTemperature")
+				}
+				
+				if(kitchenTargetTemperature.state == Uninitialized) {
+					sendCommand(kitchenTargetTemperature, 22.0)
+				}
+				
+				if(grill_meat_target_temp.state == Uninitialized) {
+					sendCommand(grill_meat_target_temp, 57.0)
+				}
+				
+				//CLEAN UP SOME VALUES THAT HAVE NOT BEEN TRIGGERED:
+				if(Mobile_Fred_Wlan.state == ON && Mobile_Fred_Wlan_Timed.state == OFF ) {
+					sendCommand( Mobile_Fred_Wlan_Timed, ON)
+				}
+				
+				if(Mobile_Sus_Wlan.state == ON && Mobile_Sus_Wlan_Timed.state == OFF) {
+					sendCommand( Mobile_Sus_Wlan_Timed, ON)
+				}
+				
+			]
+end
+
+
